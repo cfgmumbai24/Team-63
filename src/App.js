@@ -162,7 +162,7 @@ function App() {
           }
         />
         <Route
-          path="/Update_Family"
+          path="/Update_beneficiary"
           element={
             <SideBar>
               <Update_Family />
@@ -170,7 +170,7 @@ function App() {
           }
         />
         <Route
-          path="/Add_Family"
+          path="/Add_beneficiary"
           element={
             <SideBar>
               <Add_Family />
