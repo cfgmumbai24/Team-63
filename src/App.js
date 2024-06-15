@@ -19,6 +19,7 @@ import Volunteer_Details from "./pages/Admin/Volunteer_Details";
 import Sold_List from "./pages/Vendor/Sold_List";
 import Volunteer_Profile from "./pages/Volunteer/Volunteer_Profile";
 import Admin_Profile from "./pages/Admin/Admin_Profile";
+import View_Family from "./pages/Volunteer/ViewFamily";
 
 function App() {
   return (
@@ -143,6 +144,14 @@ function App() {
           element={
             <SideBar>
               <Admin_Profile />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/View_Family"
+          element={
+            <SideBar>
+              <View_Family />
             </SideBar>
           }
         />

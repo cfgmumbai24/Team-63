@@ -101,6 +101,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       { name: "Family_Data", icon: FiStar },
       { name: "Product_Data", icon: FiSettings },
       { name: "Volunteer_Profile", icon: FiStar },
+      { name: "View_Family", icon:FiSettings },
     ];
   } else if (userType == "Admin") {
     LinkItems = [
