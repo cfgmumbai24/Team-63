@@ -25,6 +25,7 @@ import Update_Family from "./pages/Volunteer/UpdateFamily";
 import Add_Family from "./pages/Volunteer/AddFamily";
 import Assign_Product from "./pages/Volunteer/AssignProduct";
 import Update_Product from "./pages/Volunteer/UpdateProduct";
+import SingleVendorDetails from "./pages/Admin/SingleVendorDetails";
 
 function App() {
   return (
@@ -77,6 +78,14 @@ function App() {
           element={
             <SideBar>
               <Vendor_Details />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Vendor_Details/:id"
+          element={
+            <SideBar>
+              <SingleVendorDetails />
             </SideBar>
           }
         />
