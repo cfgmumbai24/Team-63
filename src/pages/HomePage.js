@@ -1,47 +1,87 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
+
+  function scrollToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  function handleLoginClick() {
+    navigate("/login");
+  }
   return (
     <div className="flex flex-col items-center bg-white">
       <div className="flex z-10 justify-center items-center self-stretch px-16 py-5 w-full bg-white border-b border-solid backdrop-blur-[15px] border-black border-opacity-40 max-md:px-5 max-md:max-w-full">
         <div className="flex gap-5 justify-between items-center px-px w-full max-w-screen-xl max-md:flex-wrap max-md:max-w-full">
           <div className="flex gap-1.5 self-stretch py-3 my-auto text-black whitespace-nowrap">
-            <div className="grow text-2xl font-bold leading-10">largerthan</div>
-            <div className="self-start text-2xl leading-10">i</div>
+            {/* <div className="grow text-2xl font-bold leading-10">largerthan</div> */}
+            <img
+              src="eagl-logo.png"
+              alt="LargerThan Logo"
+              className="grow text-2xl font-bold leading-10"
+              style={{ height: "45px" }}
+            />
           </div>
-          <div className="flex gap-5 justify-center self-stretch px-5 py-4 text-base font-medium text-zinc-600 max-md:flex-wrap">
-            <div className="text-zinc-600">Home</div>
-            <div>About us</div>
-            <div>What We Do</div>
-            <div>Media</div>
-            <div>Contact</div>
+          <div className="flex gap-5 justify-center self-stretch px-5 py-4 text-lg font-medium text-zinc-600 max-md:flex-wrap">
+            <div
+              className="cursor-pointer"
+              onClick={() => scrollToSection("home")}
+            >
+              Home
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => scrollToSection("about")}
+            >
+              About us
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => scrollToSection("what-we-do")}
+            >
+              What We Do
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => scrollToSection("media")}
+            >
+              Media
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => scrollToSection("contact")}
+            >
+              Contact
+            </div>
           </div>
-          <div className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-gray-800 rounded max-md:px-5">
-            Donate
+
+          <div
+            onClick={handleLoginClick}
+            className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-gray-800 rounded max-md:px-5"
+          >
+            Login
           </div>
         </div>
       </div>
       <div className="flex overflow-hidden relative flex-col justify-center items-center self-stretch px-16 py-20 w-full font-medium min-h-[735px] max-md:px-5 max-md:max-w-full">
         <img
           loading="lazy"
-          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d63106d4c872ec524de8bfae085033e18b65e09109b02ff527ce3c3a0df19206?apiKey=30d4071338e7485e977656a212aa2027&"
-          className="object-cover absolute inset-0 size-full"
+          src="mainpage.jpg"
+          className="object-cover absolute inset-1 size-full"
+          
         />
         <div className="flex relative flex-col mt-14 w-full max-w-[1279px] max-md:mt-10 max-md:max-w-full">
           <div className="text-6xl font-bold text-white leading-[77px] max-md:max-w-full max-md:text-4xl max-md:leading-[53px]">
             Inclusive care for children with special needs
           </div>
-          <div className="flex gap-5 justify-between self-start mt-16 text-base text-right max-md:mt-10">
+          <div className="flex gap-5 justify-center self-start mt-16 text-base text-right max-md:mt-10">
             <div className="justify-center px-8 py-4 text-gray-800 bg-white rounded backdrop-blur-2xl max-md:px-5">
               What we do
-            </div>
-            <div className="flex gap-2 justify-center px-4 py-3 my-auto text-white">
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/4c1e9467e4c1c2ff7c964d0a5061b68ef18f3dc31afb9e2e6a17ece4041aff56?apiKey=30d4071338e7485e977656a212aa2027&"
-                className="shrink-0 w-6 aspect-square"
-              />
-              <div className="my-auto">Play Video</div>
             </div>
           </div>
           <div className="flex gap-5 mt-48 text-lg text-right text-white max-md:flex-wrap max-md:mt-10">
@@ -51,7 +91,10 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="mt-20 w-full max-w-[1270px] max-md:mt-10 max-md:max-w-full">
+      <div
+        id="about"
+        className="mt-20 w-full max-w-[1270px] max-md:mt-10 max-md:max-w-full"
+      >
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
           <div className="flex flex-col w-[59%] max-md:ml-0 max-md:w-full">
             <div className="flex gap-5 items-start mt-24 text-base max-md:flex-wrap max-md:mt-10">

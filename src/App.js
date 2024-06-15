@@ -25,6 +25,7 @@ import Update_Family from "./pages/Volunteer/UpdateFamily";
 import Add_Family from "./pages/Volunteer/AddFamily";
 import Assign_Product from "./pages/Volunteer/AssignProduct";
 import Update_Product from "./pages/Volunteer/UpdateProduct";
+import SingleVendorDetails from "./pages/Admin/SingleVendorDetails";
 
 function App() {
   return (
@@ -77,6 +78,14 @@ function App() {
           element={
             <SideBar>
               <Vendor_Details />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Vendor_Details/:id"
+          element={
+            <SideBar>
+              <SingleVendorDetails />
             </SideBar>
           }
         />
@@ -162,7 +171,7 @@ function App() {
           }
         />
         <Route
-          path="/Update_Family"
+          path="/Update_beneficiary"
           element={
             <SideBar>
               <Update_Family />
@@ -170,7 +179,7 @@ function App() {
           }
         />
         <Route
-          path="/Add_Family"
+          path="/Add_beneficiary"
           element={
             <SideBar>
               <Add_Family />
@@ -178,7 +187,7 @@ function App() {
           }
         />
         <Route
-          path="/Assign_Product"
+          path="/assign_product"
           element={
             <SideBar>
               <Assign_Product />
