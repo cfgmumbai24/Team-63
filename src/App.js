@@ -19,6 +19,11 @@ import Volunteer_Details from "./pages/Admin/Volunteer_Details";
 import Sold_List from "./pages/Vendor/Sold_List";
 import Volunteer_Profile from "./pages/Volunteer/Volunteer_Profile";
 import Admin_Profile from "./pages/Admin/Admin_Profile";
+import View_Family from "./pages/Volunteer/ViewFamily";
+import Update_Family from "./pages/Volunteer/UpdateFamily";
+import Add_Family from "./pages/Volunteer/AddFamily";
+import Assign_Product from "./pages/Volunteer/AssignProduct";
+import Update_Product from "./pages/Volunteer/UpdateProduct";
 
 function App() {
   return (
@@ -143,6 +148,46 @@ function App() {
           element={
             <SideBar>
               <Admin_Profile />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/View_Family"
+          element={
+            <SideBar>
+              <View_Family />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Update_Family"
+          element={
+            <SideBar>
+              <Update_Family />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Add_Family"
+          element={
+            <SideBar>
+              <Add_Family />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Assign_Product"
+          element={
+            <SideBar>
+              <Assign_Product />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Update_Product"
+          element={
+            <SideBar>
+              <Update_Product />
             </SideBar>
           }
         />
