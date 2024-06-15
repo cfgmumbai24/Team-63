@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import FamilyForm from './AddBeneficiaryComponents/familyForm';
 
 const AddFamily = () => {
   return (
     <div>
-      Add family
+      <FamilyForm />
     </div>
   );
 };

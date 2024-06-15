@@ -10,6 +10,7 @@ import {
   Select,
   Stack,
   useColorModeValue,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { storage, db } from "../../firebase/firebase-config";
@@ -29,10 +30,57 @@ function SignUpForm() {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
+  const [errors, setErrors] = useState({});
+
   const retrieveFile = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
     }
+  };
+
+  const handleValidation = () => {
+    let tempErrors = {};
+    let isValid = true;
+
+    if (!breed) {
+      tempErrors["breed"] = "Breed is required";
+      isValid = false;
+    }
+    if (!age) {
+      tempErrors["age"] = "Age is required";
+      isValid = false;
+    }
+    if (!gender) {
+      tempErrors["gender"] = "Gender is required";
+      isValid = false;
+    }
+    if (!weight) {
+      tempErrors["weight"] = "Weight is required";
+      isValid = false;
+    }
+    if (!immunization) {
+      tempErrors["immunization"] = "Immunization status is required";
+      isValid = false;
+    }
+    if (!disease) {
+      tempErrors["disease"] = "Disease is required";
+      isValid = false;
+    }
+    if (!insuranceDate) {
+      tempErrors["insuranceDate"] = "Insurance date is required";
+      isValid = false;
+    }
+    if (!insuranceValue) {
+      tempErrors["insuranceValue"] = "Insurance value is required";
+      isValid = false;
+    }
+    if (!image) {
+      tempErrors["image"] = "Image is required";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
   };
 
   const handleAdd = async () => {
@@ -55,13 +103,17 @@ function SignUpForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!handleValidation()) {
+      return;
+    }
+
     try {
       const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
       const bytes = await uploadBytes(storageRef, image);
       const downloadUrl = await getDownloadURL(storageRef);
       console.log(downloadUrl);
       setImageUrl(downloadUrl);
-      alert("Success");
+      alert("Image uploaded successfully");
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -87,15 +139,16 @@ function SignUpForm() {
             p={8}
           >
             <Stack spacing={4}>
-              <FormControl id="breed" isRequired>
+              <FormControl id="breed" isRequired isInvalid={errors.breed}>
                 <FormLabel>Breed</FormLabel>
                 <Input
                   type="text"
                   value={breed}
                   onChange={(e) => setBreed(e.target.value)}
                 />
+                <FormErrorMessage>{errors.breed}</FormErrorMessage>
               </FormControl>
-              <FormControl id="age" isRequired>
+              <FormControl id="age" isRequired isInvalid={errors.age}>
                 <FormLabel>Age</FormLabel>
                 <Input
                   type="number"
@@ -103,16 +156,8 @@ function SignUpForm() {
                   onChange={(e) => setAge(e.target.value)}
                 />
               </FormControl>
-              <FormControl id="age" isRequired>
-                <FormLabel>Price</FormLabel>
-                <Input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </FormControl>
               <HStack>
-                <FormControl isRequired>
+                <FormControl isRequired isInvalid={errors.image}>
                   <FormLabel>Goat Image </FormLabel>
                   <Input
                     type="file"
@@ -120,6 +165,7 @@ function SignUpForm() {
                     name="data"
                     onChange={retrieveFile}
                   />
+                  <FormErrorMessage>{errors.image}</FormErrorMessage>
                 </FormControl>
                 <Stack spacing={10} pt={7}>
                   <Button
@@ -136,7 +182,7 @@ function SignUpForm() {
                   </Button>
                 </Stack>
               </HStack>
-              <FormControl id="gender" isRequired>
+              <FormControl id="gender" isRequired isInvalid={errors.gender}>
                 <FormLabel>Gender</FormLabel>
                 <Select
                   value={gender}
@@ -146,16 +192,22 @@ function SignUpForm() {
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </Select>
+                <FormErrorMessage>{errors.gender}</FormErrorMessage>
               </FormControl>
-              <FormControl id="weight" isRequired>
+              <FormControl id="weight" isRequired isInvalid={errors.weight}>
                 <FormLabel>Weight (in Kgs.)</FormLabel>
                 <Input
                   type="number"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
                 />
+                <FormErrorMessage>{errors.weight}</FormErrorMessage>
               </FormControl>
-              <FormControl id="immunization" isRequired>
+              <FormControl
+                id="immunization"
+                isRequired
+                isInvalid={errors.immunization}
+              >
                 <FormLabel>Immunization</FormLabel>
                 <Select
                   value={immunization}
@@ -165,30 +217,42 @@ function SignUpForm() {
                   <option value="Up to date">Up to date</option>
                   <option value="Pending">Pending</option>
                 </Select>
+                <FormErrorMessage>{errors.immunization}</FormErrorMessage>
               </FormControl>
-              <FormControl id="disease" isRequired>
+              <FormControl id="disease" isRequired isInvalid={errors.disease}>
                 <FormLabel>Disease</FormLabel>
                 <Input
                   type="text"
                   value={disease}
                   onChange={(e) => setDisease(e.target.value)}
                 />
+                <FormErrorMessage>{errors.disease}</FormErrorMessage>
               </FormControl>
-              <FormControl id="insuranceDate" isRequired>
+              <FormControl
+                id="insuranceDate"
+                isRequired
+                isInvalid={errors.insuranceDate}
+              >
                 <FormLabel>Insurance Date</FormLabel>
                 <Input
                   type="date"
                   value={insuranceDate}
                   onChange={(e) => setInsuranceDate(e.target.value)}
                 />
+                <FormErrorMessage>{errors.insuranceDate}</FormErrorMessage>
               </FormControl>
-              <FormControl id="insuranceValue" isRequired>
+              <FormControl
+                id="insuranceValue"
+                isRequired
+                isInvalid={errors.insuranceValue}
+              >
                 <FormLabel>Insurance Value</FormLabel>
                 <Input
                   type="number"
                   value={insuranceValue}
                   onChange={(e) => setInsuranceValue(e.target.value)}
                 />
+                <FormErrorMessage>{errors.insuranceValue}</FormErrorMessage>
               </FormControl>
               <Stack spacing={10}>
                 <Button

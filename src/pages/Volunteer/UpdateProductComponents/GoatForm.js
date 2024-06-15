@@ -62,7 +62,7 @@ function SignUpForm() {
                     >
                         <Stack spacing={4} as="form" onSubmit={handleSubmit}>
                             <FormControl id="beneficiaryId" isRequired>
-                                <FormLabel>ID of the Beneficiary</FormLabel>
+                                <FormLabel>Aadhar of the Beneficiary</FormLabel>
                                 <Input
                                     type="text"
                                     value={beneficiaryId}
@@ -77,7 +77,7 @@ function SignUpForm() {
                                     onChange={(e) => setVillageName(e.target.value)}
                                 />
                             </FormControl>
-                            <FormControl id="maleChildCount" isRequired>
+                            <FormControl id="maleChildCount">
                                 <FormLabel>Male Child Count</FormLabel>
                                 <Input
                                     type="number"
@@ -85,7 +85,7 @@ function SignUpForm() {
                                     onChange={(e) => setMaleChildCount(parseInt(e.target.value))}
                                 />
                             </FormControl>
-                            <FormControl id="femaleChildCount" isRequired>
+                            <FormControl id="femaleChildCount">
                                 <FormLabel>Female Child Count</FormLabel>
                                 <Input
                                     type="number"
@@ -93,7 +93,7 @@ function SignUpForm() {
                                     onChange={(e) => setFemaleChildCount(parseInt(e.target.value))}
                                 />
                             </FormControl>
-                            <FormControl id="hasInsurance" isRequired>
+                            <FormControl id="hasInsurance">
                                 <FormLabel>Insurance of the Goats</FormLabel>
                                 <Checkbox
                                     isChecked={hasInsurance}
@@ -102,7 +102,7 @@ function SignUpForm() {
                                     Has Insurance
                                 </Checkbox>
                             </FormControl>
-                            <FormControl id="hasVaccination" isRequired>
+                            <FormControl id="hasVaccination">
                                 <FormLabel>Vaccination of the Goats</FormLabel>
                                 <Checkbox
                                     isChecked={hasVaccination}
@@ -112,7 +112,7 @@ function SignUpForm() {
                                 </Checkbox>
                             </FormControl>
                             <FormControl id="diseases">
-                                <FormLabel>Diseases (if any)</FormLabel>
+                                <FormLabel>Diseases</FormLabel>
                                 <Input
                                     type="text"
                                     value={diseases}
