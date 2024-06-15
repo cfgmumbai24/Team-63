@@ -79,7 +79,7 @@ function Home() {
           <div className="text-6xl font-bold text-white leading-[77px] max-md:max-w-full max-md:text-4xl max-md:leading-[53px]">
             Inclusive care for children with special needs
           </div>
-          <div className="flex gap-5 justify-between self-start mt-16 text-base text-right max-md:mt-10">
+          <div className="flex gap-5 justify-center self-start mt-16 text-base text-right max-md:mt-10">
             <div className="justify-center px-8 py-4 text-gray-800 bg-white rounded backdrop-blur-2xl max-md:px-5">
               What we do
             </div>
