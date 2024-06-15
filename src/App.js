@@ -5,6 +5,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import News from "./pages/News";
 import Assistant from "./pages/Assistant";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Admin_Dashboard from "./pages/Admin/Admin_Dashboard";
 import Volunteer_Dashboard from "./pages/Volunteer/Volunteer_Dashboard";
 import Vendor_Dashboard from "./pages/Vendor/Vendor_Dashboard";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/news" element={<News />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route path="/assistant" element={<Assistant />} />
 
