@@ -1,16 +1,5 @@
-import { Heading, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import styles from "./HomePage.module.css";
-import {
-  useLocation,
-  Route,
-  Routes,
-  useNavigate,
-  Navigate,
-  Link,
-} from "react-router-dom";
-import { useContract } from "../context/context";
-
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import {
   IconButton,
   Avatar,
@@ -25,68 +14,26 @@ import {
   Drawer,
   useDisclosure,
   DrawerContent,
-  BoxProps,
-  FlexProps,
   Menu,
   MenuButton,
-  MenuDivider,
-  MenuItem,
   MenuList,
+  MenuItem,
+  MenuDivider,
+  useToast,
 } from "@chakra-ui/react";
 import {
   FiHome,
-  FiTrendingUp,
-  FiCompass,
   FiStar,
   FiSettings,
   FiMenu,
   FiBell,
   FiChevronDown,
-  FiMap,
 } from "react-icons/fi";
-import { IconType } from "react-icons";
-// // LinkItemProps
-// const LinkItemProps = {
-//   name: 'string',
-//   icon: 'IconType',
-// };
+import { useContract } from "../context/context";
 
-// NavItemProps
-const NavItemProps = {
-  icon: "IconType",
-  children: "React.ReactNode",
-};
-
-// MobileProps
-const MobileProps = {
-  onOpen: () => {},
-};
-
-// SidebarProps
-const SidebarProps = {
-  onClose: () => {},
-};
-
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  // const { userType } = useContract();
-  const [usertype, setUsertype] = useState("");
-  const { account, userType } = useContract();
-  // useEffect(()=>{
-
-  //   // if (account === "0x46A2A666fc06681e2cB49440a0776a6C4Cc21906" || account === "0x597875bcA8d92C79Cbbc735A90aD25b8CaB9D608" ||account === "0xf40b291189aE7F917c39D0B7e327E0A929c9952c" || account === "0xdaDD30aAEe8E15F925b3b0F0e18f84E6FE62C6f9") {
-  //   //   setUsertype("Doctor");
-  //   // } else {
-  //   //   setUsertype("Patient");
-  //   }
-  // }, [])
-
-  // LinkItemProps
-  const LinkItemProps = {
-    name: "string",
-    icon: "IconType",
-  };
-
-  let LinkItems: Array<LinkItemProps> = [];
+const SidebarContent = ({ onClose, ...rest }) => {
+  const { userType } = useContract();
+  let LinkItems = [];
 
   if (userType === "Vendor") {
     LinkItems = [
@@ -98,11 +45,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   } else if (userType === "Volunteer") {
     LinkItems = [
       { name: "Tasks", icon: FiStar },
-      { name: "Family_Data", icon: FiStar },
-      { name: "Product_Data", icon: FiSettings },
+      { name: "Beneficiaries", icon: FiStar },
+      { name: "Product", icon: FiSettings },
       { name: "Volunteer_Profile", icon: FiStar },
     ];
-  } else if (userType == "Admin") {
+  } else if (userType === "Admin") {
     LinkItems = [
       { name: "admin_Dashboard", icon: FiHome },
       { name: "Vendor_Details", icon: FiStar },
@@ -123,14 +70,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <img src="/mediChain_icon.svg" style={{ width: "45px" }}></img>
+        <img src="/mediChain_icon.svg" style={{ width: "45px" }} alt="Logo" />
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           EagL
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem
+          key={link.name}
+          icon={link.icon}
+          userType={userType}
+          linkName={link.name}
+        >
           {link.name}
         </NavItem>
       ))}
@@ -138,66 +90,133 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <Link to={`/${children}`}>
-      <Box
-        as="a"
-        style={{ textDecoration: "none" }}
-        _focus={{ boxShadow: "none" }}
-      >
-        <Flex
-          align="center"
-          p="4"
-          mx="4"
-          borderRadius="lg"
-          role="group"
-          cursor="pointer"
-          _hover={{
-            bg: "cyan.400",
-            color: "white",
-          }}
-          {...rest}
-        >
-          {icon && (
-            <Icon
-              mr="4"
-              fontSize="16"
-              _groupHover={{
+    <>
+      {linkName === "Beneficiaries" && (
+        <Menu isOpen={isOpen}>
+          <MenuButton
+            as={Box}
+            mx="4"
+            p="4"
+            borderRadius="lg"
+            cursor="pointer"
+            _hover={{ bg: "cyan.400", color: "white" }}
+            onMouseEnter={onOpen}
+            onMouseLeave={onClose}
+          >
+            <Flex align="center">
+              {icon && (
+                <Icon
+                  mr="4"
+                  fontSize="16"
+                  _groupHover={{
+                    color: "white",
+                  }}
+                  as={icon}
+                />
+              )}
+              <Text>{children}</Text>
+              <Box ml="auto">
+                <FiChevronDown />
+              </Box>
+            </Flex>
+          </MenuButton>
+
+          <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
+            <MenuItem as={Link} to="/add_Beneficiary">Add Beneficiary</MenuItem>
+            <MenuItem as={Link} to="/update_Beneficiary">Update Beneficiary</MenuItem>
+            <MenuItem as={Link} to="/view_Beneficiary">View Beneficiary</MenuItem>
+          </MenuList>
+        </Menu>
+      )}
+
+      {linkName === "Product" && (
+        <Menu isOpen={isOpen}>
+          <MenuButton
+            as={Box}
+            mx="4"
+            p="4"
+            borderRadius="lg"
+            cursor="pointer"
+            _hover={{ bg: "cyan.400", color: "white" }}
+            onMouseEnter={onOpen}
+            onMouseLeave={onClose}
+          >
+            <Flex align="center">
+              {icon && (
+                <Icon
+                  mr="4"
+                  fontSize="16"
+                  _groupHover={{
+                    color: "white",
+                  }}
+                  as={icon}
+                />
+              )}
+              <Text>{children}</Text>
+              <Box ml="auto">
+                <FiChevronDown />
+              </Box>
+            </Flex>
+          </MenuButton>
+
+          <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
+            <MenuItem as={Link} to="/add_product">Add Product</MenuItem>
+            <MenuItem as={Link} to="/update_product">Update Product</MenuItem>
+            <MenuItem as={Link} to="/view_product">View Product</MenuItem>
+          </MenuList>
+        </Menu>
+      )}
+
+      {/* Default behavior for other link names */}
+      {linkName !== "Beneficiaries" && linkName !== "Product" && (
+        <Link to={`/${children}`} style={{ textDecoration: "none" }}>
+          <Box
+            as="a"
+            _focus={{ boxShadow: "none" }}
+            {...rest}
+          >
+            <Flex
+              align="center"
+              p="4"
+              mx="4"
+              borderRadius="lg"
+              role="group"
+              cursor="pointer"
+              _hover={{
+                bg: "cyan.400",
                 color: "white",
               }}
-              as={icon}
-            />
-          )}
-          {children}
-        </Flex>
-      </Box>
-    </Link>
+            >
+              {icon && (
+                <Icon
+                  mr="4"
+                  fontSize="16"
+                  _groupHover={{
+                    color: "white",
+                  }}
+                  as={icon}
+                />
+              )}
+              {children}
+            </Flex>
+          </Box>
+        </Link>
+      )}
+    </>
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const [usertype, setUsertype] = useState("");
+const MobileNav = ({ onOpen, ...rest }) => {
   const { account, userType } = useContract();
-  useEffect(() => {
-    if (
-      account === "0x46A2A666fc06681e2cB49440a0776a6C4Cc21906" ||
-      account === "0x597875bcA8d92C79Cbbc735A90aD25b8CaB9D608" ||
-      account === "0xf40b291189aE7F917c39D0B7e327E0A929c9952c" ||
-      account === "0xdaDD30aAEe8E15F925b3b0F0e18f84E6FE62C6f9"
-    ) {
-      setUsertype("doctor");
-    } else {
-      setUsertype("patient");
-    }
-  }, []);
-
   const navigate = useNavigate();
   const toast = useToast();
 
   const signOutOfMetamask = () => {
     navigate("/");
-
     toast({
       position: "top",
       title: "Logged Out Successfully",
@@ -226,7 +245,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
       <Text
         display={{ base: "flex", md: "none" }}
         fontSize="2xl"
@@ -235,7 +253,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       >
         E-Vault
       </Text>
-
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
           size="lg"
@@ -287,8 +304,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 };
 
 const SideBar = (props) => {
-  const navigate = useNavigate();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
   const [address, setAddress] = useState();
@@ -299,13 +314,12 @@ const SideBar = (props) => {
       setAddress(location.state.address);
       setBalance(location.state.Balance);
     }
-    // console.log(balance);
-  }, []);
+  }, [location.state]);
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
-        onClose={() => onClose}
+        onClose={() => onClose()}
         display={{ base: "none", md: "block" }}
       />
       <Drawer
@@ -320,14 +334,11 @@ const SideBar = (props) => {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {props.children}
       </Box>
     </Box>
-
-    // </div>
   );
 };
 
