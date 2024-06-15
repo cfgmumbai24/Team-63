@@ -48,20 +48,19 @@ const Login = () => {
     try {
       console.log("signing in");
       console.log(usertype);
-      const docRef = await addDoc(collection(db, usertype), {
-        name: name,
-        email: email,
-        age: age,
-        weight: weight,
-        height: height,
-        metamaskAddress: metamaskAddress,
-        ID: Id,
-        userType: usertype,
-      });
+      // const docRef = await addDoc(collection(db, usertype), {
+      //   name: name,
+      //   email: email,
+      //   age: age,
+      //   weight: weight,
+      //   height: height,
+      //   metamaskAddress: metamaskAddress,
+      //   ID: Id,
+      //   userType: usertype,
+      // });
 
-      console.log(docRef);
+      // console.log(docRef);
       console.log("succesfully done");
-      setAccount(metamaskAddress);
       toast({
         position: "top",
         title: "Details saved successfully",

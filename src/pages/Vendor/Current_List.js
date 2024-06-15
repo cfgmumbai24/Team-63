@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getDocs, query, collection } from "firebase/firestore";
+import { db } from "../../firebase/firebase-config";
 
 const PetCard = ({
   breed,
@@ -9,12 +11,13 @@ const PetCard = ({
   disease,
   insuranceDate,
   insuranceValue,
+  imageUrl,
 }) => {
   return (
     <div className="flex flex-col justify-center font-bold text-black bg-white w-100 p-6 m-4 rounded-xl shadow-lg">
       <div className="flex flex-col w-full bg-white rounded-xl">
         <img
-          src="/goat.png"
+          src={imageUrl}
           alt="Pet"
           className="w-full h-60 object-cover rounded-t-xl"
         />
@@ -41,88 +44,35 @@ const PetCard = ({
 };
 
 const Current_List = () => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      const vendorsCollection = collection(db, "Vendor");
+      const vendorSnapshot = await getDocs(vendorsCollection);
+      setData("");
+      vendorSnapshot.forEach((docc) => {
+        setData((goat) => [...goat, docc.data()]);
+      });
+    };
+    getData();
+  }, []);
+  console.log(data);
   return (
     <div className="flex flex-wrap justify-center">
-      <PetCard
-        breed="Labrador Retriever"
-        age="2 years"
-        gender="Male"
-        weight="25kg"
-        immunisation="Up to date"
-        disease="None"
-        insuranceDate="01/01/2022"
-        insuranceValue="1000"
-      />
-      <PetCard
-        breed="Golden Retriever"
-        age="4 years"
-        gender="Female"
-        weight="30kg"
-        immunisation="Pending"
-        disease="Arthritis"
-        insuranceDate="03/15/2022"
-        insuranceValue="1200"
-      />
-      <PetCard
-        breed="Labrador Retriever"
-        age="2 years"
-        gender="Male"
-        weight="25kg"
-        immunisation="Up to date"
-        disease="None"
-        insuranceDate="01/01/2022"
-        insuranceValue="1000"
-      />
-      <PetCard
-        breed="Golden Retriever"
-        age="4 years"
-        gender="Female"
-        weight="30kg"
-        immunisation="Pending"
-        disease="Arthritis"
-        insuranceDate="03/15/2022"
-        insuranceValue="1200"
-      />
-      <PetCard
-        breed="Labrador Retriever"
-        age="2 years"
-        gender="Male"
-        weight="25kg"
-        immunisation="Up to date"
-        disease="None"
-        insuranceDate="01/01/2022"
-        insuranceValue="1000"
-      />
-      <PetCard
-        breed="Golden Retriever"
-        age="4 years"
-        gender="Female"
-        weight="30kg"
-        immunisation="Pending"
-        disease="Arthritis"
-        insuranceDate="03/15/2022"
-        insuranceValue="1200"
-      />
-      <PetCard
-        breed="Labrador Retriever"
-        age="2 years"
-        gender="Male"
-        weight="25kg"
-        immunisation="Up to date"
-        disease="None"
-        insuranceDate="01/01/2022"
-        insuranceValue="1000"
-      />
-      <PetCard
-        breed="Golden Retriever"
-        age="4 years"
-        gender="Female"
-        weight="30kg"
-        immunisation="Pending"
-        disease="Arthritis"
-        insuranceDate="03/15/2022"
-        insuranceValue="1200"
-      />
+      {data.map((vendor) => (
+        <PetCard
+          key={vendor.id}
+          breed={vendor.breed}
+          age={vendor.age}
+          gender={vendor.gender}
+          weight={vendor.weight}
+          immunisation={vendor.immunisation}
+          disease={vendor.disease}
+          insuranceDate={vendor.insuranceDate}
+          insuranceValue={vendor.insuranceValue}
+          imageUrl={vendor.imageUrl}
+        />
+      ))}
     </div>
   );
 };
