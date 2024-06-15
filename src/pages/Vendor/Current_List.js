@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDocs, query, collection } from "firebase/firestore";
+import { getDocs, query, collection, where, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase-config";
 
 const PetCard = ({
@@ -12,6 +12,7 @@ const PetCard = ({
   insuranceDate,
   insuranceValue,
   imageUrl,
+  price,
 }) => {
   return (
     <div className="flex flex-col justify-center font-bold text-black bg-white w-100 p-6 m-4 rounded-xl shadow-lg">
@@ -27,6 +28,7 @@ const PetCard = ({
             <div className="flex justify-between mt-6">
               <div>Age: {age}</div>
               <div>Weight: {weight}</div>
+              <div>Price: {price}</div>
             </div>
             <div className="flex justify-between mt-4">
               <div>Gender: {gender}</div>
@@ -46,12 +48,14 @@ const PetCard = ({
 const Current_List = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
+    const aa = localStorage.getItem("aadhar");
+    console.log(aa);
     const getData = async () => {
       const vendorsCollection = collection(db, "Vendor");
-      const vendorSnapshot = await getDocs(vendorsCollection);
-      setData("");
+      const q = query(vendorsCollection, where("aadharCard", "==", aa));
+      const vendorSnapshot = await getDocs(q);
       vendorSnapshot.forEach((docc) => {
-        setData((goat) => [...goat, docc.data()]);
+        setData((d) => [...d, docc.data()]);
       });
     };
     getData();
@@ -71,6 +75,7 @@ const Current_List = () => {
           insuranceDate={vendor.insuranceDate}
           insuranceValue={vendor.insuranceValue}
           imageUrl={vendor.imageUrl}
+          price={vendor.price}
         />
       ))}
     </div>

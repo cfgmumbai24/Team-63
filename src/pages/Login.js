@@ -14,6 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContract } from "../context/context";
+import { db } from "../firebase/firebase-config";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,10 +28,9 @@ const Login = () => {
 
   const signIn = async (e) => {
     e.preventDefault();
-    if (!email || !password || !usertype) {
+    if (!usertype || !email || !password) {
       toast({
-        position: "top",
-        title: "Please fill all fields",
+        title: "Please fill all required fields",
         status: "error",
         duration: 1500,
         isClosable: true,
@@ -38,59 +39,87 @@ const Login = () => {
     }
 
     try {
-      console.log("signing in");
-      console.log(usertype);
-      // Perform authentication logic (e.g., with Firebase authentication)
-
-      // Dummy authentication logic
-      // Replace with actual authentication using Firebase or other service
-      const isAuthenticated = true; // Replace with actual authentication logic
-
-      if (isAuthenticated) {
-        toast({
-          position: "top",
-          title: "Login successful",
-          status: "success",
-          duration: 1500,
-          isClosable: true,
-        });
-
-        setUserType(usertype);
-
-        switch (usertype) {
-          case "Admin":
-            navigate("/admin_Dashboard");
-            break;
-          case "Volunteer":
-            navigate("/Tasks");
-            break;
-          case "Vendor":
-            navigate("/Current_List");
-            break;
-          default:
-            navigate("/");
-            break;
-        }
+      // Determine the collection based on user type
+      let collectionName;
+      if (usertype === "Volunteer") {
+        collectionName = "Volunteers";
+      } else if (usertype === "Vendor") {
+        collectionName = "Vendors";
+      } else if (usertype === "Admin") {
+        collectionName = "Admins";
       } else {
         toast({
-          position: "top",
-          title: "Invalid credentials",
+          title: "Invalid user type",
           status: "error",
           duration: 1500,
           isClosable: true,
         });
+        return;
+      }
+
+      // Create a query against the appropriate collection
+      const q = query(
+        collection(db, collectionName),
+        where("email", "==", email)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        toast({
+          title: "User does not exist",
+          status: "error",
+          duration: 1500,
+          isClosable: true,
+        });
+      } else {
+        // If user exists, check if the password matches
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data();
+          console.log(userData);
+          localStorage.setItem("aadhar", userData.aadharCard);
+          if (userData.password === password) {
+            toast({
+              title: "Login successful",
+              status: "success",
+              duration: 1500,
+              isClosable: true,
+            });
+          } else {
+            toast({
+              title: "Incorrect password",
+              status: "error",
+              duration: 1500,
+              isClosable: true,
+            });
+          }
+        });
+      }
+      switch (usertype) {
+        case "Admin":
+          navigate("/admin_Dashboard");
+          break;
+        case "Volunteer":
+          navigate("/Tasks");
+          break;
+        case "Vendor":
+          navigate("/Current_List");
+          break;
+        default:
+          navigate("/");
+          break;
       }
     } catch (error) {
-      console.error("Error signing in:", error.message);
       toast({
-        position: "top",
-        title: "Error signing in",
+        title: "Login failed",
         description: error.message,
         status: "error",
         duration: 1500,
         isClosable: true,
       });
     }
+
+    setUserType(usertype);
   };
 
   return (

@@ -1,36 +1,36 @@
-import React, { useState } from "react";
-import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import { db } from "../../firebase/firebase-config";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { Link } from "react-router-dom";
+
 const Vendor_Details = () => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "",
-  });
-
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const center = {
-    lat: 31.1048,
-    lng: 77.1734,
-  };
-  const mapRef = React.useRef;
-  const onMapLoad = React.useCallback((map) => {
-    mapRef.currentMap = map;
-  });
-
-  if (loadError) return "ERROR";
-  if (!isLoaded) return "Maps";
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      setData([]);
+      const vendorsRef = collection(db, "Vendors");
+      const vendorsSnapshot = await getDocs(vendorsRef);
+      vendorsSnapshot.forEach((docc) => {
+        setData((d) => [...d, docc.data()]);
+      });
+    };
+    getData();
+  }, []);
+  console.log(data);
   return (
     <div>
-      <input
-        type="text"
-        onChange={(e) => setSelectedLocation(e.target.value)}
-      />
-      <GoogleMap
-        mapContainerStyle={{
-          height: "800px",
-        }}
-        center={center}
-        zoom={13}
-        onLoad={onMapLoad}
-      ></GoogleMap>
+      {data &&
+        data.map((d) => {
+          return (
+            <Link
+              to={`/Vendor_Details/${d.aadharCard}`}
+              style={{ backgroundColor: "white", width: "200px" }}
+            >
+              <h1>{d.name}</h1>
+              <h1>{d.email}</h1>
+            </Link>
+          );
+        })}
     </div>
   );
 };

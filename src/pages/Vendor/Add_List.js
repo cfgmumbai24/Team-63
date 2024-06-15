@@ -25,7 +25,7 @@ function SignUpForm() {
   const [disease, setDisease] = useState("");
   const [insuranceDate, setInsuranceDate] = useState("");
   const [insuranceValue, setInsuranceValue] = useState("");
-
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -36,6 +36,7 @@ function SignUpForm() {
   };
 
   const handleAdd = async () => {
+    const aa = localStorage.getItem("aadhar");
     const docRef = await addDoc(collection(db, "Vendor"), {
       breed: breed,
       age: age,
@@ -46,6 +47,8 @@ function SignUpForm() {
       insuranceDate: insuranceDate,
       insuranceValue: insuranceValue,
       imageUrl: imageUrl,
+      aadharCard: aa,
+      price: price,
     });
   };
 
@@ -98,6 +101,14 @@ function SignUpForm() {
                   type="number"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
+                />
+              </FormControl>
+              <FormControl id="age" isRequired>
+                <FormLabel>Price</FormLabel>
+                <Input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </FormControl>
               <HStack>
