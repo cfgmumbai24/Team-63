@@ -12,32 +12,25 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-function SignUpForm() {
+function GoatAssignForm() {
     const [beneficiaryId, setBeneficiaryId] = useState("");
     const [villageName, setVillageName] = useState("");
-    const [maleChildCount, setMaleChildCount] = useState(0);
-    const [femaleChildCount, setFemaleChildCount] = useState(0);
+    const [maleCount, setMaleCount] = useState(0);
+    const [femaleCount, setFemaleCount] = useState(0);
     const [hasInsurance, setHasInsurance] = useState(false);
     const [hasVaccination, setHasVaccination] = useState(false);
     const [diseases, setDiseases] = useState("");
-    const [noOfInfantDeaths, setNoOfInfantDeaths] = useState(0);
-    const [noOfAdultDeaths, setNoOfAdultDeaths] = useState(0);
-    const [profitsMade, setProfitsMade] = useState(0);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Implement submission logic here
         const formData = {
             beneficiaryId,
             villageName,
-            maleChildCount,
-            femaleChildCount,
+            maleCount,
+            femaleCount,
             hasInsurance,
             hasVaccination,
             diseases,
-            noOfInfantDeaths,
-            noOfAdultDeaths,
-            profitsMade,
         };
     };
 
@@ -77,19 +70,19 @@ function SignUpForm() {
                                     onChange={(e) => setVillageName(e.target.value)}
                                 />
                             </FormControl>
-                            <FormControl id="maleChildCount">
-                                <FormLabel>Male Child Count</FormLabel>
+                            <FormControl id="maleChildCount" isRequired>
+                                <FormLabel>Male Count</FormLabel>
                                 <Input
                                     type="number"
-                                    value={maleChildCount}
+                                    value={maleCount}
                                     onChange={(e) => setMaleChildCount(parseInt(e.target.value))}
                                 />
                             </FormControl>
-                            <FormControl id="femaleChildCount">
-                                <FormLabel>Female Child Count</FormLabel>
+                            <FormControl id="femaleChildCount" isRequired>
+                                <FormLabel>Female Count</FormLabel>
                                 <Input
                                     type="number"
-                                    value={femaleChildCount}
+                                    value={femaleCount}
                                     onChange={(e) => setFemaleChildCount(parseInt(e.target.value))}
                                 />
                             </FormControl>
@@ -119,30 +112,6 @@ function SignUpForm() {
                                     onChange={(e) => setDiseases(e.target.value)}
                                 />
                             </FormControl>
-                            <FormControl id="noOfInfantDeaths" isRequired>
-                                <FormLabel>No of Infant Deaths</FormLabel>
-                                <Input
-                                    type="number"
-                                    value={noOfInfantDeaths}
-                                    onChange={(e) => setNoOfInfantDeaths(parseInt(e.target.value))}
-                                />
-                            </FormControl>
-                            <FormControl id="noOfAdultDeaths" isRequired>
-                                <FormLabel>No of Adult Deaths</FormLabel>
-                                <Input
-                                    type="number"
-                                    value={noOfAdultDeaths}
-                                    onChange={(e) => setNoOfAdultDeaths(parseInt(e.target.value))}
-                                />
-                            </FormControl>
-                            <FormControl id="profitsMade" isRequired>
-                                <FormLabel>Profits Made</FormLabel>
-                                <Input
-                                    type="number"
-                                    value={profitsMade}
-                                    onChange={(e) => setProfitsMade(parseInt(e.target.value))}
-                                />
-                            </FormControl>
                             <Stack spacing={10}>
                                 <Button
                                     bg={"blue.400"}
@@ -163,4 +132,4 @@ function SignUpForm() {
     );
 }
 
-export default SignUpForm;
+export default GoatAssignForm;

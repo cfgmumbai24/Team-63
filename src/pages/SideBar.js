@@ -169,7 +169,7 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
           </MenuButton>
 
           <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
-            <MenuItem as={Link} to="/add_product">Add Product</MenuItem>
+            <MenuItem as={Link} to="/Assign_Product">Add Product</MenuItem>
             <MenuItem as={Link} to="/update_product">Update Product</MenuItem>
             <MenuItem as={Link} to="/view_product">View Product</MenuItem>
           </MenuList>
