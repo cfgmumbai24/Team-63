@@ -18,7 +18,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuDivider,
   useToast,
 } from "@chakra-ui/react";
 import {
@@ -91,94 +90,95 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <>
       {linkName === "Beneficiaries" && (
-        <Menu isOpen={isOpen}>
+        <Menu isOpen={menuOpen} onClose={handleMenuClose}>
           <MenuButton
             as={Box}
             mx="4"
             p="4"
             borderRadius="lg"
             cursor="pointer"
-            _hover={{ bg: "cyan.400", color: "white" }}
-            onMouseEnter={onOpen}
-            onMouseLeave={onClose}
+            onClick={handleMenuToggle}
+            _focus={{ boxShadow: "none" }}
           >
             <Flex align="center">
-              {icon && (
-                <Icon
-                  mr="4"
-                  fontSize="16"
-                  _groupHover={{
-                    color: "white",
-                  }}
-                  as={icon}
-                />
-              )}
+              {icon && <Icon mr="4" fontSize="16" as={icon} />}
               <Text>{children}</Text>
               <Box ml="auto">
                 <FiChevronDown />
               </Box>
             </Flex>
           </MenuButton>
-
-          <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
-            <MenuItem as={Link} to="/add_Beneficiary">Add Beneficiary</MenuItem>
-            <MenuItem as={Link} to="/update_Beneficiary">Update Beneficiary</MenuItem>
-            <MenuItem as={Link} to="/view_Beneficiary">View Beneficiary</MenuItem>
+          <MenuList mt="0" pt="0">
+            <MenuItem as={Link} to="/add_Beneficiary" onClick={handleMenuClose}>
+              Add Beneficiary
+            </MenuItem>
+            <MenuItem
+              as={Link}
+              to="/update_Beneficiary"
+              onClick={handleMenuClose}
+            >
+              Update Beneficiary
+            </MenuItem>
+            <MenuItem
+              as={Link}
+              to="/view_Beneficiary"
+              onClick={handleMenuClose}
+            >
+              View Beneficiary
+            </MenuItem>
           </MenuList>
         </Menu>
       )}
 
       {linkName === "Product" && (
-        <Menu isOpen={isOpen}>
+        <Menu isOpen={menuOpen} onClose={handleMenuClose}>
           <MenuButton
             as={Box}
             mx="4"
             p="4"
             borderRadius="lg"
             cursor="pointer"
-            _hover={{ bg: "cyan.400", color: "white" }}
-            onMouseEnter={onOpen}
-            onMouseLeave={onClose}
+            onClick={handleMenuToggle}
+            _focus={{ boxShadow: "none" }}
           >
             <Flex align="center">
-              {icon && (
-                <Icon
-                  mr="4"
-                  fontSize="16"
-                  _groupHover={{
-                    color: "white",
-                  }}
-                  as={icon}
-                />
-              )}
+              {icon && <Icon mr="4" fontSize="16" as={icon} />}
               <Text>{children}</Text>
               <Box ml="auto">
                 <FiChevronDown />
               </Box>
             </Flex>
           </MenuButton>
-
-          <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
-            <MenuItem as={Link} to="/add_product">Add Product</MenuItem>
-            <MenuItem as={Link} to="/update_product">Update Product</MenuItem>
-            <MenuItem as={Link} to="/view_product">View Product</MenuItem>
+          <MenuList>
+            <MenuItem as={Link} to="/assign_product" onClick={handleMenuClose}>
+              Assign Product
+            </MenuItem>
+            <MenuItem as={Link} to="/update_product" onClick={handleMenuClose}>
+              Update Product
+            </MenuItem>
+            <MenuItem as={Link} to="/view_product" onClick={handleMenuClose}>
+              View Product
+            </MenuItem>
           </MenuList>
         </Menu>
       )}
 
-      {/* Default behavior for other link names */}
       {linkName !== "Beneficiaries" && linkName !== "Product" && (
         <Link to={`/${children}`} style={{ textDecoration: "none" }}>
-          <Box
-            as="a"
-            _focus={{ boxShadow: "none" }}
-            {...rest}
-          >
+          <Box as="a" _focus={{ boxShadow: "none" }} {...rest}>
             <Flex
               align="center"
               p="4"
@@ -186,21 +186,8 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
               borderRadius="lg"
               role="group"
               cursor="pointer"
-              _hover={{
-                bg: "cyan.400",
-                color: "white",
-              }}
             >
-              {icon && (
-                <Icon
-                  mr="4"
-                  fontSize="16"
-                  _groupHover={{
-                    color: "white",
-                  }}
-                  as={icon}
-                />
-              )}
+              {icon && <Icon mr="4" fontSize="16" as={icon} />}
               {children}
             </Flex>
           </Box>

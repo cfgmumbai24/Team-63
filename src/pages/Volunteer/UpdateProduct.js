@@ -4,7 +4,6 @@ import GoatForm from './UpdateProductComponents/GoatForm.js';
 const UpdateProduct = () => {
   return (
     <div>
-      Update Products
       <GoatForm />
     </div>
   );

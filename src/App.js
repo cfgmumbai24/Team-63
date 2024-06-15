@@ -178,7 +178,7 @@ function App() {
           }
         />
         <Route
-          path="/Assign_Product"
+          path="/assign_product"
           element={
             <SideBar>
               <Assign_Product />
