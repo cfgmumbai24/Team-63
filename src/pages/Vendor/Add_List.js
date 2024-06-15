@@ -26,6 +26,7 @@ function SignUpForm() {
   const [disease, setDisease] = useState("");
   const [insuranceDate, setInsuranceDate] = useState("");
   const [insuranceValue, setInsuranceValue] = useState("");
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -83,26 +84,20 @@ function SignUpForm() {
   };
 
   const handleAdd = async () => {
-    if (!handleValidation()) {
-      return;
-    }
-
-    try {
-      const docRef = await addDoc(collection(db, "Vendor"), {
-        breed,
-        age,
-        gender,
-        weight,
-        immunization,
-        disease,
-        insuranceDate,
-        insuranceValue,
-        imageUrl,
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
+    const aa = localStorage.getItem("aadhar");
+    const docRef = await addDoc(collection(db, "Vendor"), {
+      breed: breed,
+      age: age,
+      gender: gender,
+      weight: weight,
+      immunization: immunization,
+      disease: disease,
+      insuranceDate: insuranceDate,
+      insuranceValue: insuranceValue,
+      imageUrl: imageUrl,
+      aadharCard: aa,
+      price: price,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -160,7 +155,6 @@ function SignUpForm() {
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                 />
-                <FormErrorMessage>{errors.age}</FormErrorMessage>
               </FormControl>
               <HStack>
                 <FormControl isRequired isInvalid={errors.image}>

@@ -1,9 +1,10 @@
 import React from 'react'
+import UpdateFamilyForm from './UpdateBeneficiary.js/updateFamilyform';
 
 const UpdateFamily = () => {
   return (
     <div>
-      Update Family
+      <UpdateFamilyForm />  
     </div>
   );
 };
