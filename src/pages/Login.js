@@ -1,17 +1,4 @@
-const firebaseConfig = {
-  apiKey: "",
-  authDomain: "medihub-b4ec9.firebaseapp.com",
-  projectId: "medihub-b4ec9",
-  storageBucket: "medihub-b4ec9.appspot.com",
-  messagingSenderId: "503059893481",
-  appId: "1:503059893481:web:bda599b6ebd97aab9cf478",
-};
-
-import React, { useEffect, useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
-import { db, FirebaseAuth } from "../firebase/firebase-config";
-import { useContract } from "../context/context";
-import { useNavigate } from "react-router";
+import React, { useState } from "react";
 import {
   Flex,
   Box,
@@ -21,67 +8,84 @@ import {
   Stack,
   Button,
   Heading,
-  Text,
   useColorModeValue,
   useToast,
   Select,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { useContract } from "../context/context";
 
 const Login = () => {
   const navigate = useNavigate();
   const toast = useToast();
-  const { authData } = useContract();
+  const { setAccount, setUserType } = useContract();
 
-  const { setAccount, setUserType, account } = useContract();
-
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [age, setAge] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [metamaskAddress, setMetamaskAddress] = useState("");
+  const [password, setPassword] = useState("");
   const [usertype, setUsertype] = useState("");
-  const [Id, setID] = useState("");
 
   const signIn = async (e) => {
     e.preventDefault();
-    try {
-      console.log("signing in");
-      console.log(usertype);
-      const docRef = await addDoc(collection(db, usertype), {
-        name: name,
-        email: email,
-        age: age,
-        weight: weight,
-        height: height,
-        metamaskAddress: metamaskAddress,
-        ID: Id,
-        userType: usertype,
-      });
-
-      console.log(docRef);
-      console.log("succesfully done");
-      setAccount(metamaskAddress);
+    if (!email || !password || !usertype) {
       toast({
         position: "top",
-        title: "Details saved successfully",
-        status: "success",
+        title: "Please fill all fields",
+        status: "error",
         duration: 1500,
         isClosable: true,
       });
-      setUserType(usertype);
-      if (usertype === "Vendor") {
-        console.log("navigating to patient dashboard");
-        navigate("/Current_List");
-      } else if (usertype === "Volunteer") {
-        navigate("/Tasks");
-      } else if (usertype === "Admin") {
-        navigate("/admin_Dashboard");
+      return;
+    }
+
+    try {
+      console.log("signing in");
+      console.log(usertype);
+      // Perform authentication logic (e.g., with Firebase authentication)
+
+      // Dummy authentication logic
+      // Replace with actual authentication using Firebase or other service
+      const isAuthenticated = true; // Replace with actual authentication logic
+
+      if (isAuthenticated) {
+        toast({
+          position: "top",
+          title: "Login successful",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+
+        setUserType(usertype);
+
+        switch (usertype) {
+          case "Admin":
+            navigate("/admin_Dashboard");
+            break;
+          case "Volunteer":
+            navigate("/Tasks");
+            break;
+          case "Vendor":
+            navigate("/Current_List");
+            break;
+          default:
+            navigate("/");
+            break;
+        }
+      } else {
+        toast({
+          position: "top",
+          title: "Invalid credentials",
+          status: "error",
+          duration: 1500,
+          isClosable: true,
+        });
       }
-    } catch (e) {
+    } catch (error) {
+      console.error("Error signing in:", error.message);
       toast({
         position: "top",
-        title: "Error while saving details",
+        title: "Error signing in",
+        description: error.message,
         status: "error",
         duration: 1500,
         isClosable: true,
@@ -99,7 +103,7 @@ const Login = () => {
       >
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
-            <Heading fontSize={"4xl"}>Sign Up</Heading>
+            <Heading fontSize={"4xl"}>Login</Heading>
           </Stack>
           <Box
             rounded={"lg"}
@@ -109,64 +113,32 @@ const Login = () => {
             p={8}
           >
             <Stack spacing={4}>
-              <FormControl id="text" isRequired>
-                <FormLabel>Name</FormLabel>
-                <Input
-                  type="text"
-                  // isDisabled
-                  value={authData?.displayName}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </FormControl>
               <FormControl id="email" isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
                   type="email"
-                  // isDisabled
-                  value={authData?.email}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </FormControl>
-              <FormControl id="number" isRequired>
-                <FormLabel>Age</FormLabel>
-                <Input type="number" onChange={(e) => setAge(e.target.value)} />
-              </FormControl>
-              <FormControl id="number" isRequired>
-                <FormLabel>Height(in Cm.)</FormLabel>
+              <FormControl id="password" isRequired>
+                <FormLabel>Password</FormLabel>
                 <Input
-                  type="number"
-                  onChange={(e) => setHeight(e.target.value)}
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </FormControl>
-              <FormControl id="number" isRequired>
-                <FormLabel>Weight(in Kgs.)</FormLabel>
-                <Input
-                  type="number"
-                  onChange={(e) => setWeight(e.target.value)}
-                />
-              </FormControl>
-              <FormControl id="text" isRequired>
-                <FormLabel>Metamask Address</FormLabel>
-                <Input
-                  type="text"
-                  value={account}
-                  isDisabled
-                  onChange={(e) => setMetamaskAddress(e.target.value)}
-                />
-              </FormControl>
-
-              <FormControl id="text" isRequired>
-                <FormLabel>Hospital ID</FormLabel>
-                <Input type="text" onChange={(e) => setID(e.target.value)} />
-              </FormControl>
-
               <FormControl id="userType" isRequired>
                 <FormLabel>User Type</FormLabel>
-                <Select onChange={(e) => setUsertype(e.target.value)}>
+                <Select
+                  value={usertype}
+                  onChange={(e) => setUsertype(e.target.value)}
+                >
                   <option value="">Select User Type</option>
-                  <option value="Vendor">Vendor</option>
-                  <option value="Volunteer">Volunteer</option>
                   <option value="Admin">Admin</option>
+                  <option value="Volunteer">Volunteer</option>
+                  <option value="Vendor">Vendor</option>
                 </Select>
               </FormControl>
               <Stack spacing={10}>
