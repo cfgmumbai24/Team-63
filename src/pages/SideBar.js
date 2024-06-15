@@ -51,8 +51,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
   } else if (userType === "Admin") {
     LinkItems = [
       { name: "admin_Dashboard", icon: FiHome },
-      { name: "Vendor_Details", icon: FiStar },
-      { name: "Volunteer_Details", icon: FiStar },
+      { name: "Vendor", icon: FiStar },
+      { name: "Volunteer", icon: FiStar },
+      { name: "Add_Person", icon: FiStar },
+      { name: "Approve_Requests", icon: FiStar },
       { name: "Admin_Profile", icon: FiStar },
     ];
   }
@@ -122,11 +124,7 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
             </Flex>
           </MenuButton>
           <MenuList mt="0" pt="0">
-            <MenuItem 
-              as={Link} 
-              to="/add_Beneficiary" 
-              onClick={handleMenuClose}
-            >
+            <MenuItem as={Link} to="/add_Beneficiary" onClick={handleMenuClose}>
               Add Beneficiary
             </MenuItem>
             <MenuItem
