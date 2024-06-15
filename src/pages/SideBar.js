@@ -69,10 +69,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <img src="/mediChain_icon.svg" style={{ width: "45px" }} alt="Logo" />
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          EagL
-        </Text>
+        <img src="/eagl_logo.png" style={{ height: "45px" }} alt="Logo" />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
@@ -124,7 +121,7 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
           <MenuList mt="0" pt="0">
             <MenuItem 
               as={Link} 
-              to="/add_Beneficiary" 
+              to="/add_Beneficiary"  
               onClick={handleMenuClose}
             >
               Add Beneficiary
