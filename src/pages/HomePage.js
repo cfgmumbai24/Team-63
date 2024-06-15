@@ -62,9 +62,15 @@ function Home() {
 
           <div
             onClick={handleLoginClick}
-            className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-gray-800 rounded max-md:px-5"
+            className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-blue-800 rounded max-md:px-5"
           >
             Login
+          </div>
+          <div
+            onClick={handleLoginClick}
+            className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-blue-800 rounded max-md:px-5"
+          >
+            Register
           </div>
         </div>
       </div>
@@ -72,14 +78,13 @@ function Home() {
         <img
           loading="lazy"
           src="mainpage.jpg"
-          className="object-cover absolute inset-1 size-full"
-          
+          className="object-cover absolute inset-0 size-full"
         />
         <div className="flex relative flex-col mt-14 w-full max-w-[1279px] max-md:mt-10 max-md:max-w-full">
           <div className="text-6xl font-bold text-white leading-[77px] max-md:max-w-full max-md:text-4xl max-md:leading-[53px]">
             Inclusive care for children with special needs
           </div>
-          <div className="flex gap-5 justify-center self-start mt-16 text-base text-right max-md:mt-10">
+          <div className="flex gap-5 justify-between self-start mt-16 text-base text-right max-md:mt-10">
             <div className="justify-center px-8 py-4 text-gray-800 bg-white rounded backdrop-blur-2xl max-md:px-5">
               What we do
             </div>

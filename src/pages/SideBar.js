@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import {CheckIcon,InfoOutlineIcon,AddIcon,CalendarIcon,SearchIcon} from "@chakra-ui/icons";
 import {
   IconButton,
   Avatar,
@@ -36,24 +37,24 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
   if (userType === "Vendor") {
     LinkItems = [
-      { name: "Current_List", icon: FiStar },
-      { name: "Add_List", icon: FiSettings },
-      { name: "Sold_List", icon: FiSettings },
-      { name: "Vendor_Profile", icon: FiSettings },
+      { name: "Current_List", icon: CheckIcon },
+      { name: "Add_List", icon: AddIcon },
+      { name: "Sold_List", icon: CalendarIcon },
+      { name: "Vendor_Profile", icon: InfoOutlineIcon },
     ];
   } else if (userType === "Volunteer") {
     LinkItems = [
-      { name: "Tasks", icon: FiStar },
-      { name: "Beneficiaries", icon: FiStar },
-      { name: "Product", icon: FiSettings },
-      { name: "Volunteer_Profile", icon: FiStar },
+      { name: "Tasks", icon: CheckIcon },
+      { name: "Beneficiaries", icon: SearchIcon },
+      { name: "Product", icon: FiStar },
+      { name: "Volunteer_Profile", icon: InfoOutlineIcon },
     ];
   } else if (userType === "Admin") {
     LinkItems = [
-      { name: "admin_Dashboard", icon: FiHome },
-      { name: "Vendor_Details", icon: FiStar },
-      { name: "Volunteer_Details", icon: FiStar },
-      { name: "Admin_Profile", icon: FiStar },
+      { name: "admin_Dashboard", icon: CheckIcon },
+      { name: "Vendor_Details", icon:SearchIcon },
+      { name: "Volunteer_Details", icon: SearchIcon },
+      { name: "Admin_Profile", icon:InfoOutlineIcon },
     ];
   }
 
