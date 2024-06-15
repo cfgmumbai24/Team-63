@@ -45,7 +45,7 @@ import {
   FiMap,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
-// // LinkItemProps
+// LinkItemProps
 // const LinkItemProps = {
 //   name: 'string',
 //   icon: 'IconType',
@@ -71,14 +71,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   // const { userType } = useContract();
   const [usertype, setUsertype] = useState("");
   const { account, userType } = useContract();
-  // useEffect(()=>{
-
-  //   // if (account === "0x46A2A666fc06681e2cB49440a0776a6C4Cc21906" || account === "0x597875bcA8d92C79Cbbc735A90aD25b8CaB9D608" ||account === "0xf40b291189aE7F917c39D0B7e327E0A929c9952c" || account === "0xdaDD30aAEe8E15F925b3b0F0e18f84E6FE62C6f9") {
-  //   //   setUsertype("Doctor");
-  //   // } else {
-  //   //   setUsertype("Patient");
-  //   }
-  // }, [])
 
   // LinkItemProps
   const LinkItemProps = {
@@ -98,9 +90,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   } else if (userType === "Volunteer") {
     LinkItems = [
       { name: "Tasks", icon: FiStar },
-      { name: "Family_Data", icon: FiStar },
       { name: "Product_Data", icon: FiSettings },
       { name: "Volunteer_Profile", icon: FiStar },
+      { name: "View_Family", icon:FiSettings },
+      { name: "Update_Family", icon:FiSettings },
+      { name: "Add_Family", icon:FiSettings},
+      { name: "Assign_Product", icon:FiSettings},
+      { name: "Update_Product", icon:FiSettings}
     ];
   } else if (userType == "Admin") {
     LinkItems = [
