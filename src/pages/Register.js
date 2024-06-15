@@ -1,3 +1,4 @@
+// Register.js
 import {
   Box,
   Button,
@@ -5,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Select,
   Stack,
@@ -12,6 +14,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../firebase/firebase-config"; // Import Firestore database
+import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
 
 function Register() {
   const toast = useToast();
@@ -24,7 +29,31 @@ function Register() {
   const [panCard, setPanCard] = useState("");
   const [productType, setProductType] = useState("");
 
-  const register = () => {
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const retrieveFile = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
+      const bytes = await uploadBytes(storageRef, image);
+      const downloadUrl = await getDownloadURL(storageRef);
+      console.log(downloadUrl);
+      setImageUrl(downloadUrl);
+      alert("Success");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const register = async () => {
     if (!registrationType || !name || !email || !password || !aadharCard) {
       toast({
         title: "Please fill all required fields",
@@ -45,24 +74,62 @@ function Register() {
       return;
     }
 
-    // Perform registration logic here
+    try {
+      // Add user to the Firestore collection based on registration type
+      if (registrationType === "Vendor") {
+        await addDoc(collection(db, "Vendors"), {
+          userType: registrationType,
+          name: name,
+          email: email,
+          password: password,
+          aadharCard: aadharCard,
+          panCard: panCard,
+          productType: productType,
+          imgUrl: imageUrl,
+        });
 
-    // Example logic to display success message
-    toast({
-      title: "Registration successful",
-      status: "success",
-      duration: 1500,
-      isClosable: true,
-    });
+        toast({
+          title: "Registration successful",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }
+      if (registrationType === "Volunteer") {
+        await addDoc(collection(db, "Volunteers"), {
+          userType: registrationType,
+          name: name,
+          email: email,
+          password: password,
+          aadharCard: aadharCard,
+          imgUrl: imageUrl,
+        });
 
-    // Clear form fields after successful registration (optional)
-    setRegistrationType("");
-    setName("");
-    setEmail("");
-    setPassword("");
-    setAadharCard("");
-    setPanCard("");
-    setProductType("");
+        toast({
+          title: "Registration successful",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      }
+
+      // Clear form fields after successful registration (optional)
+      setRegistrationType("");
+      setName("");
+      setEmail("");
+      setPassword("");
+      setAadharCard("");
+      setPanCard("");
+      setProductType("");
+    } catch (error) {
+      toast({
+        title: "Registration failed",
+        description: error.message,
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -84,6 +151,31 @@ function Register() {
             style={{ width: "460px" }}
             p={8}
           >
+            <HStack>
+              <FormControl isRequired>
+                <FormLabel> Profile Image </FormLabel>
+                <Input
+                  type="file"
+                  id="file-upload"
+                  name="data"
+                  onChange={retrieveFile}
+                />
+              </FormControl>
+              <Stack spacing={10} pt={7}>
+                <Button
+                  onClick={handleSubmit}
+                  loadingText="Submitting"
+                  size="lg"
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                >
+                  Upload
+                </Button>
+              </Stack>
+            </HStack>
             <Stack spacing={4}>
               <FormControl id="registrationType" isRequired>
                 <FormLabel>Registration Type</FormLabel>

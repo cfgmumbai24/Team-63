@@ -27,6 +27,7 @@ import Assign_Product from "./pages/Volunteer/AssignProduct";
 import Update_Product from "./pages/Volunteer/UpdateProduct";
 import Approve_Requests from "./pages/Admin/Approve_Requests";
 import Add_Person from "./pages/Admin/Add_Person";
+import SingleVendorDetails from "./pages/Admin/SingleVendorDetails";
 
 function App() {
   return (
@@ -79,6 +80,14 @@ function App() {
           element={
             <SideBar>
               <Vendor_Details />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Vendor_Details/:id"
+          element={
+            <SideBar>
+              <SingleVendorDetails />
             </SideBar>
           }
         />
