@@ -120,11 +120,7 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
             </Flex>
           </MenuButton>
           <MenuList mt="0" pt="0">
-            <MenuItem 
-              as={Link} 
-              to="/add_Beneficiary"  
-              onClick={handleMenuClose}
-            >
+            <MenuItem as={Link} to="/add_Beneficiary" onClick={handleMenuClose}>
               Add Beneficiary
             </MenuItem>
             <MenuItem

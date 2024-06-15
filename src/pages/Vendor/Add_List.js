@@ -158,7 +158,7 @@ function SignUpForm() {
               </FormControl>
               <HStack>
                 <FormControl isRequired isInvalid={errors.image}>
-                  <FormLabel>Goat Image </FormLabel>
+                  <FormLabel>Breed Image </FormLabel>
                   <Input
                     type="file"
                     id="file-upload"

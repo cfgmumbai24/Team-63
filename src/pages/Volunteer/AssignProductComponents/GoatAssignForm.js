@@ -4,6 +4,7 @@ import {
     Flex,
     FormControl,
     FormLabel,
+    HStack,
     Heading,
     Input,
     Checkbox,
@@ -11,6 +12,8 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../../../firebase/firebase-config"
 
 function GoatAssignForm() {
     const [beneficiaryId, setBeneficiaryId] = useState("");
@@ -34,6 +37,30 @@ function GoatAssignForm() {
         };
     };
 
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+
+    const retrieveFile = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    };
+
+    const handleSubmit2 = async (e) => {
+        e.preventDefault();
+
+        try {
+            const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
+            const bytes = await uploadBytes(storageRef, image);
+            const downloadUrl = await getDownloadURL(storageRef);
+            console.log(downloadUrl);
+            setImageUrl(downloadUrl);
+            alert("Success");
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    };
+
     return (
         <section className="todo-container">
             <Flex
@@ -54,6 +81,31 @@ function GoatAssignForm() {
                         p={8}
                     >
                         <Stack spacing={4} as="form" onSubmit={handleSubmit}>
+                        <HStack>
+                                <FormControl isRequired>
+                                    <FormLabel> Image </FormLabel>
+                                    <Input
+                                        type="file"
+                                        id="file-upload"
+                                        name="data"
+                                        onChange={retrieveFile}
+                                    />
+                                </FormControl>
+                                <Stack spacing={10} pt={7}>
+                                    <Button
+                                        onClick={handleSubmit2}
+                                        loadingText="Submitting"
+                                        size="lg"   
+                                        bg={"blue.400"}
+                                        color={"white"}
+                                        _hover={{
+                                            bg: "blue.500",
+                                        }}
+                                    >
+                                        Upload
+                                    </Button>
+                                </Stack>
+                            </HStack>
                             <FormControl id="beneficiaryId" isRequired>
                                 <FormLabel>Aadhar of the Beneficiary</FormLabel>
                                 <Input
