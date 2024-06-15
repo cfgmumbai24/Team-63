@@ -162,14 +162,15 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
               </Box>
             </Flex>
           </MenuButton>
-          <MenuList>
-            <MenuItem as={Link} to="/add_product" onClick={handleMenuClose}>
+
+          <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
+            <MenuItem as={Link} to="/add_product">
               Add Product
             </MenuItem>
-            <MenuItem as={Link} to="/update_product" onClick={handleMenuClose}>
+            <MenuItem as={Link} to="/update_product">
               Update Product
             </MenuItem>
-            <MenuItem as={Link} to="/view_product" onClick={handleMenuClose}>
+            <MenuItem as={Link} to="/view_product">
               View Product
             </MenuItem>
           </MenuList>
