@@ -95,7 +95,7 @@ function GoatAssignForm() {
                                     <Button
                                         onClick={handleSubmit2}
                                         loadingText="Submitting"
-                                        size="lg"
+                                        size="lg"   
                                         bg={"blue.400"}
                                         color={"white"}
                                         _hover={{

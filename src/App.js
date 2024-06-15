@@ -28,6 +28,8 @@ import Update_Product from "./pages/Volunteer/UpdateProduct";
 import Approve_Requests from "./pages/Admin/Approve_Requests";
 import Add_Person from "./pages/Admin/Add_Person";
 import SingleVendorDetails from "./pages/Admin/SingleVendorDetails";
+import View_Product from "./pages/Volunteer/viewProduct";
+import View_Beneficiary from "./pages/Volunteer/viewBeneficiary";
 
 function App() {
   return (
@@ -217,6 +219,22 @@ function App() {
           element={
             <SideBar>
               <Add_Person />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/view_product"
+          element={
+            <SideBar>
+              <View_Product />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/view_beneficiary"
+          element={
+            <SideBar>
+              <View_Beneficiary />
             </SideBar>
           }
         />
