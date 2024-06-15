@@ -51,8 +51,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
   } else if (userType === "Admin") {
     LinkItems = [
       { name: "admin_Dashboard", icon: FiHome },
-      { name: "Vendor", icon: FiStar },
-      { name: "Volunteer", icon: FiStar },
+      { name: "Vendor_Details", icon: FiStar },
+      { name: "Volunteer_Details", icon: FiStar },
       { name: "Add_Person", icon: FiStar },
       { name: "Approve_Requests", icon: FiStar },
       { name: "Admin_Profile", icon: FiStar },
