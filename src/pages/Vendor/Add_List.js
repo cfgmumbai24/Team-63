@@ -5,12 +5,16 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Select,
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { storage, db } from "../../firebase/firebase-config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
 
 function SignUpForm() {
   const [breed, setBreed] = useState("");
@@ -21,14 +25,43 @@ function SignUpForm() {
   const [disease, setDisease] = useState("");
   const [insuranceDate, setInsuranceDate] = useState("");
   const [insuranceValue, setInsuranceValue] = useState("");
-  const [email, setEmail] = useState("");
-  const [authData, setAuthData] = useState({ displayName: "", email: "" });
-  const [account, setAccount] = useState("");
-  const [id, setID] = useState("");
-  const [usertype, setUsertype] = useState("");
 
-  const signIn = () => {
-    // Implement sign-in logic here
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const retrieveFile = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleAdd = async () => {
+    const docRef = await addDoc(collection(db, "Vendor"), {
+      breed: breed,
+      age: age,
+      gender: gender,
+      weight: weight,
+      immunization: immunization,
+      disease: disease,
+      insuranceDate: insuranceDate,
+      insuranceValue: insuranceValue,
+      imageUrl: imageUrl,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
+      const bytes = await uploadBytes(storageRef, image);
+      const downloadUrl = await getDownloadURL(storageRef);
+      console.log(downloadUrl);
+      setImageUrl(downloadUrl);
+      alert("Success");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   return (
@@ -67,6 +100,31 @@ function SignUpForm() {
                   onChange={(e) => setAge(e.target.value)}
                 />
               </FormControl>
+              <HStack>
+                <FormControl isRequired>
+                  <FormLabel>Goat Image </FormLabel>
+                  <Input
+                    type="file"
+                    id="file-upload"
+                    name="data"
+                    onChange={retrieveFile}
+                  />
+                </FormControl>
+                <Stack spacing={10} pt={7}>
+                  <Button
+                    onClick={handleSubmit}
+                    loadingText="Submitting"
+                    size="lg"
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                  >
+                    Upload
+                  </Button>
+                </Stack>
+              </HStack>
               <FormControl id="gender" isRequired>
                 <FormLabel>Gender</FormLabel>
                 <Select
@@ -128,7 +186,7 @@ function SignUpForm() {
                   _hover={{
                     bg: "blue.500",
                   }}
-                  onClick={signIn}
+                  onClick={handleAdd}
                 >
                   Add Goat
                 </Button>
