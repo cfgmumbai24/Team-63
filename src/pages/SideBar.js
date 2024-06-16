@@ -132,7 +132,7 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
             </MenuItem>
             <MenuItem
               as={Link}
-              to="/view_Beneficiary"
+              to="/View_Family"
               onClick={handleMenuClose}
             >
               View Beneficiary
