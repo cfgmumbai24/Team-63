@@ -103,10 +103,6 @@ function SignUpForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!handleValidation()) {
-      return;
-    }
-
     try {
       const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
       const bytes = await uploadBytes(storageRef, image);
