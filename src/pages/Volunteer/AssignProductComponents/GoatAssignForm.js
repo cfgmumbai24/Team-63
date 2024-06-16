@@ -16,6 +16,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase/firebase-config";
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
+import { getDocs, query, collection, where, getDoc, addDoc } from "firebase/firestore";
 
 function GoatAssignForm() {
     const [beneficiaryId, setBeneficiaryId] = useState("");
@@ -32,22 +33,31 @@ function GoatAssignForm() {
     const [location, setLocation] = useState({});
 
     const handleSubmit = async (e) => {
+        console.log("Hello");
         e.preventDefault();
-        const coordinates = await getCurrentPosition();
-        const formData = {
-            beneficiaryId,
-            villageName,
-            maleCount,
-            femaleCount,
-            hasInsurance,
-            hasVaccination,
-            diseases,
-            imageUrl,
-            location: coordinates,
-        };
-        // Add your form submission logic here
-        console.log(formData);
-    };
+        // Implement submission logic here
+    
+        try {
+          const aa = localStorage.getItem("aadhar");
+          const coordinates = await getCurrentPosition();
+          console.log("Hello");
+          const docRef = await addDoc(collection(db, "Beneficiary"), {
+            beneficiaryId: beneficiaryId,
+            villageName: villageName,
+            maleCount: maleCount,
+            femaleCount: femaleCount,
+            hasInsurance: hasInsurance,
+            hasVaccination: hasVaccination,
+            diseases: diseases,
+            volunteer: aa,
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+      };
 
     const handleUpload = async () => {
         try {
@@ -196,7 +206,7 @@ function GoatAssignForm() {
                                         bg: "blue.500",
                                     }}
                                     type="submit"
-                                >
+                                    onClick={handleSubmit}>
                                     Update Goats
                                 </Button>
                             </Stack>
