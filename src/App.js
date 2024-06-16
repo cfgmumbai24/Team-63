@@ -29,6 +29,7 @@ import Approve_Requests from "./pages/Admin/Approve_Requests";
 import Add_Person from "./pages/Admin/Add_Person";
 import SingleVendorDetails from "./pages/Admin/SingleVendorDetails";
 import View_Product from "./pages/Volunteer/viewProduct";
+import Add_Work from "./pages/Admin/Add_Work";
 
 function App() {
   return (
@@ -226,6 +227,14 @@ function App() {
           element={
             <SideBar>
               <View_Product />
+            </SideBar>
+          }
+        />
+        <Route
+          path="/Add_Work"
+          element={
+            <SideBar>
+              <Add_Work />
             </SideBar>
           }
         />
