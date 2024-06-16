@@ -62,6 +62,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       { name: "Volunteer_Details", icon: SearchIcon },
       { name: "Approve_Requests", icon: SearchIcon },
       { name: "Add_Person", icon: SearchIcon },
+      { name: "Add_Work", icon: SearchIcon },
       { name: "Admin_Profile", icon: InfoOutlineIcon },
     ];
   }
@@ -138,11 +139,7 @@ const NavItem = ({ icon, children, userType, linkName, ...rest }) => {
             >
               Update Beneficiary
             </MenuItem>
-            <MenuItem
-              as={Link}
-              to="/View_Family"
-              onClick={handleMenuClose}
-            >
+            <MenuItem as={Link} to="/View_Family" onClick={handleMenuClose}>
               View Beneficiary
             </MenuItem>
           </MenuList>
