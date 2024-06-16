@@ -1,5 +1,5 @@
+import { addDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
 
 const TodoList = () => {
   const [items, setItems] = useState([
@@ -11,10 +11,26 @@ const TodoList = () => {
   const [search, setSearch] = useState("");
 
   const handleCheck = (id) => {
+    // Toggle the checked state of the item
     const updatedItems = items.map((item) =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
     setItems(updatedItems);
+
+    // Get the current location coordinates
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error fetching location: ", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   };
 
   const filteredItems = items.filter((item) =>
