@@ -34,16 +34,9 @@ function SignUpForm() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [location, setLocation] = useState({});
 
-  const handleSubmit = async (e) => {
-    alert("Ok");
-    console.log("Hello");
-    e.preventDefault();
-    // Implement submission logic here
-
+  const handleSubmit = async () => {
     try {
       const aa = localStorage.getItem("aadhar");
-      const coordinates = await getCurrentPosition();
-      console.log("Hello");
       const docRef = await addDoc(collection(db, "Beneficiary"), {
         beneficiaryId: beneficiaryId,
         villageName: villageName,
@@ -56,8 +49,6 @@ function SignUpForm() {
         noOfAdultDeaths: noOfAdultDeaths,
         profitsMade: profitsMade,
         volunteer: aa,
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -71,42 +62,18 @@ function SignUpForm() {
     }
   };
 
-  const handleUpload = async () => {
+  const handleSubmit2 = async (e) => {
+    e.preventDefault();
+
     try {
       const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
-      await uploadBytes(storageRef, image);
+      const bytes = await uploadBytes(storageRef, image);
       const downloadUrl = await getDownloadURL(storageRef);
+      console.log(downloadUrl);
       setImageUrl(downloadUrl);
-      alert("Image uploaded successfully");
+      alert("Success");
     } catch (error) {
       console.error("Error uploading image:", error);
-    }
-  };
-
-  const handleTakePhoto = async () => {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-      });
-      setImage(img);
-      handleUpload();
-      const imageUrl = image.webPath;
-      setPhotoUrl(imageUrl);
-    } catch (error) {
-      console.error("Error taking photo:", error);
-    }
-  };
-  const getCurrentPosition = async () => {
-    try {
-      const position = await Geolocation.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
-      setLocation({ latitude, longitude });
-      return { latitude, longitude };
-    } catch (error) {
-      console.error("Error getting location:", error);
-      return null;
     }
   };
 
