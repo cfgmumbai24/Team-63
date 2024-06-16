@@ -32,11 +32,13 @@ function SignUpForm() {
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
     const [photoUrl, setPhotoUrl] = useState("");
+    const [location, setLocation] = useState({});
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Implement submission logic here
         const coordinates = await getCurrentPosition();
+        console.log(coordinates);
         const formData = {
             beneficiaryId,
             villageName,
