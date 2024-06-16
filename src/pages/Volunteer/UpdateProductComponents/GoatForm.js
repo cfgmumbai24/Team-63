@@ -16,9 +16,11 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase/firebase-config"
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
+import { useToast } from "@chakra-ui/react";
 import { getDocs, query, collection, where, getDoc, addDoc } from "firebase/firestore";
 
 function SignUpForm() {
+    const toast = useToast()
     const [beneficiaryId, setBeneficiaryId] = useState("");
     const [villageName, setVillageName] = useState("");
     const [maleChildCount, setMaleChildCount] = useState(0);
@@ -58,6 +60,7 @@ function SignUpForm() {
     //       console.error("Error adding document: ", e);
     //     }
     //   };
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

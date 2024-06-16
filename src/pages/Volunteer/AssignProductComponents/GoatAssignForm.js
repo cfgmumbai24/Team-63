@@ -11,6 +11,7 @@ import {
     Stack,
     useColorModeValue,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase/firebase-config";
@@ -19,6 +20,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { getDocs, query, collection, where, getDoc, addDoc } from "firebase/firestore";
 
 function GoatAssignForm() {
+    const toast = useToast();
     const [beneficiaryId, setBeneficiaryId] = useState("");
     const [villageName, setVillageName] = useState("");
     const [maleCount, setMaleCount] = useState(0);
@@ -59,6 +61,12 @@ function GoatAssignForm() {
                 latitude: coordinates.latitude,
                 longitude: coordinates.longitude,
             });
+            toast({
+                title: "Successfully Submitted",
+                status: "success",
+                duration: 1500,
+                isClosable: true,
+              });
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
             console.error("Error adding document: ", e);
