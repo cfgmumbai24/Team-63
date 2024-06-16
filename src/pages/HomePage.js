@@ -14,6 +14,9 @@ function Home() {
   function handleLoginClick() {
     navigate("/login");
   }
+  function handleRegisterClick() {
+    navigate("/register");
+  }
   return (
     <div className="flex flex-col items-center bg-white">
       <div className="flex z-10 justify-center items-center self-stretch px-16 py-5 w-full bg-white border-b border-solid backdrop-blur-[15px] border-black border-opacity-40 max-md:px-5 max-md:max-w-full">
@@ -59,8 +62,7 @@ function Home() {
               Contact
             </div>
           </div>
-
-          
+          <div className="flex flex-row justify-center gap-4">
           <div
             onClick={handleLoginClick}
             className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-blue-800 rounded max-md:px-5"
@@ -68,10 +70,11 @@ function Home() {
             Login
           </div>
           <div
-            onClick={handleLoginClick}
+            onClick={handleRegisterClick}
             className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-blue-800 rounded max-md:px-5"
           >
             Register
+          </div>
           </div>
         </div>
       </div>
