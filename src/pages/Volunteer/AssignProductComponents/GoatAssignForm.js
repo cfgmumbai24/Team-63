@@ -114,7 +114,7 @@ function GoatAssignForm() {
                                 <Stack spacing={10} pt={7}>
                                     <Button
                                         onClick={handleTakePhoto}
-                                        size="lg"
+                                        size="lg"   
                                         bg={"blue.400"}
                                         color={"white"}
                                         _hover={{
