@@ -60,6 +60,7 @@ function Home() {
             </div>
           </div>
 
+          
           <div
             onClick={handleLoginClick}
             className="justify-center self-stretch px-8 py-3 my-auto text-base font-medium text-right text-white whitespace-nowrap bg-blue-800 rounded max-md:px-5"
