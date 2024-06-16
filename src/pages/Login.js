@@ -74,6 +74,7 @@ const Login = () => {
         });
       } else {
         // If user exists, check if the password matches
+        var res = false;
         querySnapshot.forEach((doc) => {
           const userData = doc.data();
           console.log(userData);
@@ -86,6 +87,7 @@ const Login = () => {
               isClosable: true,
             });
           } else {
+            res = true;
             toast({
               title: "Incorrect password",
               status: "error",
@@ -95,19 +97,21 @@ const Login = () => {
           }
         });
       }
-      switch (usertype) {
-        case "Admin":
-          navigate("/admin_Dashboard");
-          break;
-        case "Volunteer":
-          navigate("/Tasks");
-          break;
-        case "Vendor":
-          navigate("/Current_List");
-          break;
-        default:
-          navigate("/");
-          break;
+      if (res === false) {
+        switch (usertype) {
+          case "Admin":
+            navigate("/admin_Dashboard");
+            break;
+          case "Volunteer":
+            navigate("/Tasks");
+            break;
+          case "Vendor":
+            navigate("/Current_List");
+            break;
+          default:
+            navigate("/");
+            break;
+        }
       }
     } catch (error) {
       toast({
