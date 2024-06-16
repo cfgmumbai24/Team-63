@@ -25,7 +25,10 @@ function GoatAssignForm() {
     const [femaleCount, setFemaleCount] = useState(0);
     const [hasInsurance, setHasInsurance] = useState(false);
     const [hasVaccination, setHasVaccination] = useState(false);
+    const [noOfInfantDeaths, setNoOfInfantDeaths] = useState(0);
+    const [noOfAdultDeaths, setNoOfAdultDeaths] = useState(0);
     const [diseases, setDiseases] = useState("");
+    const [profitsMade, setProfitsMade] = useState(0);
 
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
@@ -36,28 +39,31 @@ function GoatAssignForm() {
         console.log("Hello");
         e.preventDefault();
         // Implement submission logic here
-    
+
         try {
-          const aa = localStorage.getItem("aadhar");
-          const coordinates = await getCurrentPosition();
-          console.log("Hello");
-          const docRef = await addDoc(collection(db, "Beneficiary"), {
-            beneficiaryId: beneficiaryId,
-            villageName: villageName,
-            maleCount: maleCount,
-            femaleCount: femaleCount,
-            hasInsurance: hasInsurance,
-            hasVaccination: hasVaccination,
-            diseases: diseases,
-            volunteer: aa,
-            latitude: coordinates.latitude,
-            longitude: coordinates.longitude,
-          });
-          console.log("Document written with ID: ", docRef.id);
+            const aa = localStorage.getItem("aadhar");
+            const coordinates = await getCurrentPosition();
+            console.log("Hello");
+            const docRef = await addDoc(collection(db, "Beneficiary"), {
+                beneficiaryId: beneficiaryId,
+                villageName: villageName,
+                maleCount: maleCount,
+                femaleCount: femaleCount,
+                hasInsurance: hasInsurance,
+                hasVaccination: hasVaccination,
+                diseases: diseases,
+                volunteer: aa,
+                noOfInfantDeaths: 0,
+                noOfAdultDeaths: 0,
+                profitsMade: 0,
+                latitude: coordinates.latitude,
+                longitude: coordinates.longitude,
+            });
+            console.log("Document written with ID: ", docRef.id);
         } catch (e) {
-          console.error("Error adding document: ", e);
+            console.error("Error adding document: ", e);
         }
-      };
+    };
 
     const handleUpload = async () => {
         try {
@@ -78,7 +84,7 @@ function GoatAssignForm() {
                 allowEditing: false,
                 resultType: CameraResultType.Uri
             });
-                setImage(img);
+            setImage(img);
             handleUpload();
             const imageUrl = img.webPath;
             setPhotoUrl(imageUrl);
@@ -120,11 +126,11 @@ function GoatAssignForm() {
                     >
                         <Stack spacing={4} as="form" onSubmit={handleSubmit}>
                             <HStack>
-                
+
                                 <Stack spacing={10} pt={7}>
                                     <Button
                                         onClick={handleTakePhoto}
-                                        size="lg"   
+                                        size="lg"
                                         bg={"blue.400"}
                                         color={"white"}
                                         _hover={{
