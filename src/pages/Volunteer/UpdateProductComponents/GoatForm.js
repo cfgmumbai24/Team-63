@@ -78,7 +78,8 @@ function SignUpForm() {
                 allowEditing: false,
                 resultType: CameraResultType.Uri
             });
-
+            setImage(img);
+            handleUpload();
             const imageUrl = image.webPath;
             setPhotoUrl(imageUrl);
         } catch (error) {
