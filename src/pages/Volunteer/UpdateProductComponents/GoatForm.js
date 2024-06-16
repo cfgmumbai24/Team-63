@@ -16,6 +16,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase/firebase-config"
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
+import { getDocs, query, collection, where, getDoc, addDoc } from "firebase/firestore";
 
 function SignUpForm() {
   const [beneficiaryId, setBeneficiaryId] = useState("");
@@ -34,9 +35,11 @@ function SignUpForm() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [location, setLocation] = useState({});
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const aa = localStorage.getItem("aadhar");
+      const coordinates = await getCurrentPosition();
       const docRef = await addDoc(collection(db, "Beneficiary"), {
         beneficiaryId: beneficiaryId,
         villageName: villageName,
@@ -55,116 +58,88 @@ function SignUpForm() {
       console.error("Error adding document: ", e);
     }
   };
-    const handleSubmit = async (e) => {
-        console.log("Hello");
-        e.preventDefault();
-        // Implement submission logic here
-        const coordinates = await getCurrentPosition();
-        // console.log(coordinates);
-        const formData = {
-            beneficiaryId,
-            villageName,
-            maleChildCount,
-            femaleChildCount,
-            hasInsurance,
-            hasVaccination,
-            diseases,
-            noOfInfantDeaths,
-            noOfAdultDeaths,
-            profitsMade,
-            imageUrl,
-            location: coordinates,
-        };
-    };
 
-    const retrieveFile = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0]);
-        }
-    };
-
-  const handleSubmit2 = async (e) => {
-    e.preventDefault();
-
+  const handleUpload = async () => {
     try {
-      const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
-      const bytes = await uploadBytes(storageRef, image);
-      const downloadUrl = await getDownloadURL(storageRef);
-      console.log(downloadUrl);
-      setImageUrl(downloadUrl);
-      alert("Success");
+        const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
+        await uploadBytes(storageRef, image);
+        const downloadUrl = await getDownloadURL(storageRef);
+        setImageUrl(downloadUrl);
+        alert("Image uploaded successfully");
     } catch (error) {
-      console.error("Error uploading image:", error);
+        console.error("Error uploading image:", error);
     }
-  };
+};
 
-    const handleTakePhoto = async () => {
-        try {
-            const image = await Camera.getPhoto({
-                quality: 90,
-                allowEditing: false,
-                resultType: CameraResultType.Uri
-            });
+const handleTakePhoto = async () => {
+    try {
+        const img = await Camera.getPhoto({
+            quality: 90,
+            allowEditing: false,
+            resultType: CameraResultType.Uri
+        });
             setImage(img);
-            handleUpload();
-            const imageUrl = image.webPath;
-            setPhotoUrl(imageUrl);
-        } catch (error) {
-            console.error('Error taking photo:', error);
-        }
-    };
-    const getCurrentPosition = async () => {
-        try {
-            const position = await Geolocation.getCurrentPosition();
-            const { latitude, longitude } = position.coords;
-            setLocation({ latitude, longitude });
-            return { latitude, longitude };
-        } catch (error) {
-            console.error('Error getting location:', error);
-            return null;
-        }
-    };
+        handleUpload();
+        const imageUrl = img.webPath;
+        setPhotoUrl(imageUrl);
+    } catch (error) {
+        console.error('Error taking photo:', error);
+    }
+};
 
-    return (
-        <section className="todo-container">
-            <Flex
-                minH={"100vh"}
-                align={"center"}
-                justify={"center"}
-                bg={useColorModeValue("gray.50", "gray.800")}
-            >
-                <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-                    <Stack align={"center"}>
-                        <Heading fontSize={"4xl"}>Goat Details</Heading>
-                    </Stack>
-                    <Box
-                        rounded={"lg"}
-                        bg={useColorModeValue("white", "gray.700")}
-                        boxShadow={"lg"}
-                        style={{ width: "460px" }}
-                        p={8}
-                    >
-                        <Stack spacing={4} as="form" onSubmit={handleSubmit}>
-                            <HStack>
-                                <Stack>
-                                    <Button
-                                        onClick={handleTakePhoto}
-                                        size="lg"
-                                        bg={"blue.400"}
-                                        color={"white"}
-                                        _hover={{
-                                            bg: "blue.500",
-                                        }}
-                                    >
-                                        Take Photo
-                                    </Button>
-                                </Stack>
-                            </HStack>
-                            {photoUrl && (
-                                <Box mt={4}>
-                                    <img src={photoUrl} alt="Captured" style={{ width: "100%" }} />
-                                </Box>
-                            )}
+const getCurrentPosition = async () => {
+    try {
+        const position = await Geolocation.getCurrentPosition();
+        const { latitude, longitude } = position.coords;
+        setLocation({ latitude, longitude });
+        return { latitude, longitude };
+    } catch (error) {
+        console.error('Error getting location:', error);
+        return null;
+    }
+};
+
+return (
+    <section className="todo-container">
+        <Flex
+            minH={"100vh"}
+            align={"center"}
+            justify={"center"}
+            bg={useColorModeValue("gray.50", "gray.800")}
+        >
+            <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+                <Stack align={"center"}>
+                    <Heading fontSize={"4xl"}>Goat Details</Heading>
+                </Stack>
+                <Box
+                    rounded={"lg"}
+                    bg={useColorModeValue("white", "gray.700")}
+                    boxShadow={"lg"}
+                    style={{ width: "460px" }}
+                    p={8}
+                >
+                    <Stack spacing={4} as="form" onSubmit={handleSubmit}>
+                        <HStack>
+            
+                            <Stack spacing={10} pt={7}>
+                                <Button
+                                    onClick={handleTakePhoto}
+                                    size="lg"   
+                                    bg={"blue.400"}
+                                    color={"white"}
+                                    _hover={{
+                                        bg: "blue.500",
+                                    }}
+                                >
+                                    Take Photo
+                                </Button>
+                            </Stack>
+                        </HStack>
+                        {photoUrl && (
+                            <Box mt={4}>
+                                <img src={photoUrl} alt="Captured" style={{ width: "100%" }} />
+                            </Box>
+                        )}
                             <FormControl id="beneficiaryId" isRequired>
                                 <FormLabel>Aadhar of the Beneficiary</FormLabel>
                                 <Input
