@@ -14,6 +14,8 @@ import {
 import { useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase/firebase-config";
+import { Camera, CameraResultType } from "@capacitor/camera";
+import { Geolocation } from "@capacitor/geolocation";
 
 function SignUpForm() {
   const [beneficiaryId, setBeneficiaryId] = useState("");
@@ -50,6 +52,9 @@ function SignUpForm() {
       console.error("Error adding document: ", e);
     }
   };
+
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const retrieveFile = (e) => {
     if (e.target.files && e.target.files[0]) {
