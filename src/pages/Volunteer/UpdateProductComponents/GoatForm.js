@@ -53,9 +53,6 @@ function SignUpForm() {
     }
   };
 
-  const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
-
   const retrieveFile = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
