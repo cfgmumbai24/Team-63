@@ -13,7 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../../../firebase/firebase-config"
+import { db, storage } from "../../../firebase/firebase-config";
+import { Camera, CameraResultType } from '@capacitor/camera';
+import { Geolocation } from '@capacitor/geolocation';
 
 function GoatAssignForm() {
     const [beneficiaryId, setBeneficiaryId] = useState("");
@@ -24,8 +26,14 @@ function GoatAssignForm() {
     const [hasVaccination, setHasVaccination] = useState(false);
     const [diseases, setDiseases] = useState("");
 
-    const handleSubmit = (e) => {
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+    const [photoUrl, setPhotoUrl] = useState("");
+    const [location, setLocation] = useState({});
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const coordinates = await getCurrentPosition();
         const formData = {
             beneficiaryId,
             villageName,
@@ -34,30 +42,50 @@ function GoatAssignForm() {
             hasInsurance,
             hasVaccination,
             diseases,
+            imageUrl,
+            location: coordinates,
         };
+        // Add your form submission logic here
+        console.log(formData);
     };
 
-    const [image, setImage] = useState(null);
-    const [imageUrl, setImageUrl] = useState("");
-
-    const retrieveFile = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0]);
+    const handleUpload = async () => {
+        try {
+            const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
+            await uploadBytes(storageRef, image);
+            const downloadUrl = await getDownloadURL(storageRef);
+            setImageUrl(downloadUrl);
+            alert("Image uploaded successfully");
+        } catch (error) {
+            console.error("Error uploading image:", error);
         }
     };
 
-    const handleSubmit2 = async (e) => {
-        e.preventDefault();
-
+    const handleTakePhoto = async () => {
         try {
-            const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
-            const bytes = await uploadBytes(storageRef, image);
-            const downloadUrl = await getDownloadURL(storageRef);
-            console.log(downloadUrl);
-            setImageUrl(downloadUrl);
-            alert("Success");
+            const img = await Camera.getPhoto({
+                quality: 90,
+                allowEditing: false,
+                resultType: CameraResultType.Uri
+            });
+                setImage(img);
+            handleUpload();
+            const imageUrl = img.webPath;
+            setPhotoUrl(imageUrl);
         } catch (error) {
-            console.error("Error uploading image:", error);
+            console.error('Error taking photo:', error);
+        }
+    };
+
+    const getCurrentPosition = async () => {
+        try {
+            const position = await Geolocation.getCurrentPosition();
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+            return { latitude, longitude };
+        } catch (error) {
+            console.error('Error getting location:', error);
+            return null;
         }
     };
 
@@ -81,20 +109,11 @@ function GoatAssignForm() {
                         p={8}
                     >
                         <Stack spacing={4} as="form" onSubmit={handleSubmit}>
-                        <HStack>
-                                <FormControl isRequired>
-                                    <FormLabel> Image </FormLabel>
-                                    <Input
-                                        type="file"
-                                        id="file-upload"
-                                        name="data"
-                                        onChange={retrieveFile}
-                                    />
-                                </FormControl>
+                            <HStack>
+                
                                 <Stack spacing={10} pt={7}>
                                     <Button
-                                        onClick={handleSubmit2}
-                                        loadingText="Submitting"
+                                        onClick={handleTakePhoto}
                                         size="lg"
                                         bg={"blue.400"}
                                         color={"white"}
@@ -102,10 +121,15 @@ function GoatAssignForm() {
                                             bg: "blue.500",
                                         }}
                                     >
-                                        Upload
+                                        Take Photo
                                     </Button>
                                 </Stack>
                             </HStack>
+                            {photoUrl && (
+                                <Box mt={4}>
+                                    <img src={photoUrl} alt="Captured" style={{ width: "100%" }} />
+                                </Box>
+                            )}
                             <FormControl id="beneficiaryId" isRequired>
                                 <FormLabel>Aadhar of the Beneficiary</FormLabel>
                                 <Input
@@ -127,7 +151,7 @@ function GoatAssignForm() {
                                 <Input
                                     type="number"
                                     value={maleCount}
-                                    onChange={(e) => setMaleChildCount(parseInt(e.target.value))}
+                                    onChange={(e) => setMaleCount(parseInt(e.target.value))}
                                 />
                             </FormControl>
                             <FormControl id="femaleChildCount" isRequired>
@@ -135,7 +159,7 @@ function GoatAssignForm() {
                                 <Input
                                     type="number"
                                     value={femaleCount}
-                                    onChange={(e) => setFemaleChildCount(parseInt(e.target.value))}
+                                    onChange={(e) => setFemaleCount(parseInt(e.target.value))}
                                 />
                             </FormControl>
                             <FormControl id="hasInsurance">

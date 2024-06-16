@@ -14,6 +14,8 @@ import {
 import { useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase/firebase-config"
+import { Camera, CameraResultType } from '@capacitor/camera';
+import { Geolocation } from '@capacitor/geolocation';
 
 function SignUpForm() {
     const [beneficiaryId, setBeneficiaryId] = useState("");
@@ -27,9 +29,14 @@ function SignUpForm() {
     const [noOfAdultDeaths, setNoOfAdultDeaths] = useState(0);
     const [profitsMade, setProfitsMade] = useState(0);
 
-    const handleSubmit = (e) => {
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+    const [photoUrl, setPhotoUrl] = useState("");
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Implement submission logic here
+        const coordinates = await getCurrentPosition();
         const formData = {
             beneficiaryId,
             villageName,
@@ -41,11 +48,10 @@ function SignUpForm() {
             noOfInfantDeaths,
             noOfAdultDeaths,
             profitsMade,
+            imageUrl,
+            location: coordinates,
         };
     };
-
-    const [image, setImage] = useState(null);
-    const [imageUrl, setImageUrl] = useState("");
 
     const retrieveFile = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -53,18 +59,41 @@ function SignUpForm() {
         }
     };
 
-    const handleSubmit2 = async (e) => {
-        e.preventDefault();
-
+    const handleUpload = async () => {
         try {
             const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
-            const bytes = await uploadBytes(storageRef, image);
+            await uploadBytes(storageRef, image);
             const downloadUrl = await getDownloadURL(storageRef);
-            console.log(downloadUrl);
             setImageUrl(downloadUrl);
-            alert("Success");
+            alert("Image uploaded successfully");
         } catch (error) {
             console.error("Error uploading image:", error);
+        }
+    };
+
+    const handleTakePhoto = async () => {
+        try {
+            const image = await Camera.getPhoto({
+                quality: 90,
+                allowEditing: false,
+                resultType: CameraResultType.Uri
+            });
+
+            const imageUrl = image.webPath;
+            setPhotoUrl(imageUrl);
+        } catch (error) {
+            console.error('Error taking photo:', error);
+        }
+    };
+    const getCurrentPosition = async () => {
+        try {
+            const position = await Geolocation.getCurrentPosition();
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+            return { latitude, longitude };
+        } catch (error) {
+            console.error('Error getting location:', error);
+            return null;
         }
     };
 
@@ -89,19 +118,9 @@ function SignUpForm() {
                     >
                         <Stack spacing={4} as="form" onSubmit={handleSubmit}>
                             <HStack>
-                                <FormControl isRequired>
-                                    <FormLabel> Image </FormLabel>
-                                    <Input
-                                        type="file"
-                                        id="file-upload"
-                                        name="data"
-                                        onChange={retrieveFile}
-                                    />
-                                </FormControl>
-                                <Stack spacing={10} pt={7}>
+                                <Stack>
                                     <Button
-                                        onClick={handleSubmit2}
-                                        loadingText="Submitting"
+                                        onClick={handleTakePhoto}
                                         size="lg"
                                         bg={"blue.400"}
                                         color={"white"}
@@ -109,10 +128,15 @@ function SignUpForm() {
                                             bg: "blue.500",
                                         }}
                                     >
-                                        Upload
+                                        Take Photo
                                     </Button>
                                 </Stack>
                             </HStack>
+                            {photoUrl && (
+                                <Box mt={4}>
+                                    <img src={photoUrl} alt="Captured" style={{ width: "100%" }} />
+                                </Box>
+                            )}
                             <FormControl id="beneficiaryId" isRequired>
                                 <FormLabel>Aadhar of the Beneficiary</FormLabel>
                                 <Input
