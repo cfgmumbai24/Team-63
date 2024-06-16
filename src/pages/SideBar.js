@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import {CheckIcon,InfoOutlineIcon,AddIcon,CalendarIcon,SearchIcon} from "@chakra-ui/icons";
-import{
+import {
+  CheckIcon,
+  InfoOutlineIcon,
+  AddIcon,
+  CalendarIcon,
+  SearchIcon,
+} from "@chakra-ui/icons";
+import {
   IconButton,
   Avatar,
   Box,
@@ -52,9 +58,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
   } else if (userType === "Admin") {
     LinkItems = [
       { name: "admin_Dashboard", icon: CheckIcon },
-      { name: "Vendor_Details", icon:SearchIcon },
+      { name: "Vendor_Details", icon: SearchIcon },
       { name: "Volunteer_Details", icon: SearchIcon },
-      { name: "Admin_Profile", icon:InfoOutlineIcon },
+      { name: "Approve_Requests", icon: SearchIcon },
+      { name: "Add_Person", icon: SearchIcon },
+      { name: "Admin_Profile", icon: InfoOutlineIcon },
     ];
   }
 
