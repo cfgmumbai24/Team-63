@@ -10,9 +10,9 @@ const Admin_Dashboard = () => {
           alt="Graph 1"
           className="w-full h-auto max-h-96 object-contain"
         />
-        <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+        <a href="http://localhost:8502" className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
           Graph 1
-        </button>
+        </a>
       </div>
       <div className="flex flex-col items-center">
         <img
@@ -20,9 +20,9 @@ const Admin_Dashboard = () => {
           alt="Graph 2"
           className="w-full h-auto max-h-96 object-contain"
         />
-        <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+        <a href="http://localhost:8501" className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
           Graph 2
-        </button>
+        </a>
       </div>
       <div className="col-span-2 flex flex-col items-center">
         <img
@@ -30,9 +30,9 @@ const Admin_Dashboard = () => {
           alt="Graph 3"
           className="w-full h-auto max-h-96 object-contain"
         />
-        <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+        <a href="http://localhost:8502" className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
           Graph 3
-        </button>
+        </a>
       </div>
     </div>
   );
