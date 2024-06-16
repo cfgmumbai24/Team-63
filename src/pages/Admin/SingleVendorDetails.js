@@ -7,6 +7,7 @@ import {
   where,
   getDoc,
   deleteDoc,
+  addDoc,
   doc,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase-config";
@@ -25,12 +26,34 @@ const PetCard = ({
   id,
 }) => {
   const handleDelete = async () => {
+    // try {
+    //   const vendorDocRef = doc(db, "Vendor", id); // 'Vendors' is the collection name
+    //   const docSnap = await getDoc(vendorDocRef);
+    //   console.log(docSnap.data());
+    //   await deleteDoc(vendorDocRef);
+    //   console.log(`Document with ID ${id} successfully deleted`);
+    // } catch (error) {
+    //   console.error("Error deleting document:", error);
+    // }
     try {
-      const vendorDocRef = doc(db, "Vendor", id); // 'Vendors' is the collection name
-      await deleteDoc(vendorDocRef);
-      console.log(`Document with ID ${id} successfully deleted`);
+      // Fetch the document from the "Vendor" collection
+      const vendorDocRef = doc(db, "Vendor", id);
+      const docSnap = await getDoc(vendorDocRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        console.log("Document data:", data);
+
+        // Add the data to the "SoldList" collection
+        const soldListCollection = collection(db, "SoldList");
+        await addDoc(soldListCollection, data);
+        console.log("Document data added to SoldList collection");
+        await deleteDoc(vendorDocRef);
+      } else {
+        console.log("No such document!");
+      }
     } catch (error) {
-      console.error("Error deleting document:", error);
+      console.error("Error transferring document data:", error);
     }
   };
 
@@ -46,9 +69,7 @@ const PetCard = ({
           <div className="self-center mt-4 text-3xl text-center">{breed}</div>
           <div className="flex flex-col px-7 mt-4 w-full text-xl">
             <div className="flex justify-between mt-6">
-              <div>
-                Age: {age} {id}
-              </div>
+              <div>Age: {age}</div>
               <div>Weight: {weight}</div>
               <div>Price: {price}</div>
             </div>
