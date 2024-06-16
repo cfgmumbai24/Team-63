@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getDocs, query, collection, where, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase-config";
+import PettCard from "./ViewFamilyComponents/PettCard"
 
 const PetCard = ({ volunteer, aadharCard, maritalStatus, numOfPeople }) => {
   return (
@@ -46,7 +47,7 @@ const ViewFamily = () => {
   return (
     <div className="flex flex-wrap justify-center">
       {data.map((vendor) => (
-        <PetCard
+        <PettCard
           volunteer={vendor.volunteer}
           aadharCard={vendor.aadharCard}
           maritalStatus={vendor.maritalStatus}
