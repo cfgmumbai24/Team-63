@@ -18,40 +18,42 @@ import { Camera, CameraResultType } from "@capacitor/camera";
 import { Geolocation } from "@capacitor/geolocation";
 
 function SignUpForm() {
-  const [beneficiaryId, setBeneficiaryId] = useState("");
-  const [villageName, setVillageName] = useState("");
-  const [maleChildCount, setMaleChildCount] = useState(0);
-  const [femaleChildCount, setFemaleChildCount] = useState(0);
-  const [hasInsurance, setHasInsurance] = useState(false);
-  const [hasVaccination, setHasVaccination] = useState(false);
-  const [diseases, setDiseases] = useState("");
-  const [noOfInfantDeaths, setNoOfInfantDeaths] = useState(0);
-  const [noOfAdultDeaths, setNoOfAdultDeaths] = useState(0);
-  const [profitsMade, setProfitsMade] = useState(0);
-  const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+    const [beneficiaryId, setBeneficiaryId] = useState("");
+    const [villageName, setVillageName] = useState("");
+    const [maleChildCount, setMaleChildCount] = useState(0);
+    const [femaleChildCount, setFemaleChildCount] = useState(0);
+    const [hasInsurance, setHasInsurance] = useState(false);
+    const [hasVaccination, setHasVaccination] = useState(false);
+    const [diseases, setDiseases] = useState("");
+    const [noOfInfantDeaths, setNoOfInfantDeaths] = useState(0);
+    const [noOfAdultDeaths, setNoOfAdultDeaths] = useState(0);
+    const [profitsMade, setProfitsMade] = useState(0);
 
-  const handleSubmit = async () => {
-    try {
-      const aa = localStorage.getItem("aadhar");
-      const docRef = await addDoc(collection(db, "Beneficiary"), {
-        beneficiaryId: beneficiaryId,
-        villageName: villageName,
-        maleChildCount: maleChildCount,
-        femaleChildCount: femaleChildCount,
-        hasInsurance: hasInsurance,
-        hasVaccination: hasVaccination,
-        diseases: diseases,
-        noOfInfantDeaths: noOfInfantDeaths,
-        noOfAdultDeaths: noOfAdultDeaths,
-        profitsMade: profitsMade,
-        volunteer: aa,
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+    const [photoUrl, setPhotoUrl] = useState("");
+    const [location, setLocation] = useState({});
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // Implement submission logic here
+        const coordinates = await getCurrentPosition();
+        console.log(coordinates);
+        const formData = {
+            beneficiaryId,
+            villageName,
+            maleChildCount,
+            femaleChildCount,
+            hasInsurance,
+            hasVaccination,
+            diseases,
+            noOfInfantDeaths,
+            noOfAdultDeaths,
+            profitsMade,
+            imageUrl,
+            location: coordinates,
+        };
+    };
 
   const retrieveFile = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -59,20 +61,44 @@ function SignUpForm() {
     }
   };
 
-  const handleSubmit2 = async (e) => {
-    e.preventDefault();
+    const handleUpload = async () => {
+        try {
+            const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
+            await uploadBytes(storageRef, image);
+            const downloadUrl = await getDownloadURL(storageRef);
+            setImageUrl(downloadUrl);
+            alert("Image uploaded successfully");
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    };
 
-    try {
-      const storageRef = ref(storage, `CFG/${Date.now()}.jpg`);
-      const bytes = await uploadBytes(storageRef, image);
-      const downloadUrl = await getDownloadURL(storageRef);
-      console.log(downloadUrl);
-      setImageUrl(downloadUrl);
-      alert("Success");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
+    const handleTakePhoto = async () => {
+        try {
+            const image = await Camera.getPhoto({
+                quality: 90,
+                allowEditing: false,
+                resultType: CameraResultType.Uri
+            });
+            setImage(img);
+            handleUpload();
+            const imageUrl = image.webPath;
+            setPhotoUrl(imageUrl);
+        } catch (error) {
+            console.error('Error taking photo:', error);
+        }
+    };
+    const getCurrentPosition = async () => {
+        try {
+            const position = await Geolocation.getCurrentPosition();
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+            return { latitude, longitude };
+        } catch (error) {
+            console.error('Error getting location:', error);
+            return null;
+        }
+    };
 
   return (
     <section className="todo-container">
