@@ -28,7 +28,7 @@ const PetCard = ({
             <div className="flex justify-between mt-6">
               <div>Age: {age}</div>
               <div>Weight: {weight}</div>
-              <div>Price: {price}</div>
+              <div>Price: 200</div>
             </div>
             <div className="flex justify-between mt-4">
               <div>Gender: {gender}</div>
